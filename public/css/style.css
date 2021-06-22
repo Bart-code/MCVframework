@@ -1,0 +1,109 @@
+body
+{
+	background-color: #58C1D2;
+	color: white;
+	font-size: 30px;
+	text-align: center;
+	font-family: 'Roboto Slab', serif;
+}
+
+
+
+h1
+{
+	font-size: 60px;
+	margin: 5px;
+}
+
+h2
+{
+	font-size: 30px;
+	font-weight: 200;
+	font-style: italic;
+	margin: 5px;
+}
+
+.mainPanel
+{
+	background-color:#30B2C7;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 40px;
+	border: 2px solid #20A2B7;
+	box-shadow: 5px 5px 10px #225;
+	font-size: 22px;
+	font-family: 'Roboto Slab', serif;
+	padding: 50px !important;
+}
+
+.test1
+{
+	background-color:#eee;
+	min-height: 100px;
+}
+
+.bg-container
+{
+	background-color: #58C1D2;
+}
+
+.buttonsStyle
+{
+	background-color:#1a98A2;
+	box-shadow: 3px 3px 5px #225;
+	border: none;
+	color: white;
+	
+}
+
+.buttonsStyle:hover
+{
+	background-color: #2AA8B2;
+}
+
+
+.text-leftttt
+{
+	text-align: left;
+}
+
+.rowMargin
+{
+	margin-top: 30px;
+}
+
+.textField
+{
+	height: 28px;
+	font-size: 18px;
+	color: #1a98A2;
+	border-radius: 5px;
+}
+
+.textarea
+{
+	min-height: 180px;
+}
+
+.errorStyle
+{
+	color: red; 
+	font-size: 18px;
+}
+
+.modalStyle
+{
+	background-color: #58C1D2 !important;
+	color: white;
+	border-radius: 30px !important;
+}
+
+@media(max-width: 575px)
+{
+	.buttonsStyle
+	{
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+}
+
