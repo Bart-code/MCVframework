@@ -13,7 +13,7 @@
 				Name:
 			</div>
 			<div class="row" >
-				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName" name="name">
+				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName" name="name" value="{{ user.name }}">
 			</div>
 			
 			{% if user.nameError is not empty %}
@@ -24,10 +24,10 @@
 				Last name:
 			</div>
 			<div class="row" >
-				<input type="text" class="form-control" placeholder="User - last name" aria-label="lastName" name="lastName">
+				<input type="text" class="form-control" placeholder="User - last name" aria-label="lastName" name="lastName" value="{{ user.lastName }}">
 			</div>
 			
-			{% if user.nameError is not empty %}
+			{% if user.lastNameError is not empty %}
 				<p class="errorStyle">{{ user.lastNameError }}</p>
 			{% endif %}
 			
@@ -35,10 +35,10 @@
 				E-mail address:
 			</div>
 			<div class="row " >
-				<input type="text" class="form-control" placeholder="User - name" aria-label="UserEmail" name="email">
+				<input type="text" class="form-control" placeholder="User - name" aria-label="UserEmail" name="email" value="{{ user.email }}">
 			</div>
 			
-			{% if user.nameError is not empty %}
+			{% if user.emailError is not empty %}
 				<p class="errorStyle">{{ user.emailError }}</p>
 			{% endif %}
 			
@@ -46,10 +46,10 @@
 				Login:
 			</div>
 			<div class="row" >
-				<input type="text" class="form-control" placeholder="User - login" aria-label="UserLogin" name="login">
+				<input type="text" class="form-control" placeholder="User - login" aria-label="UserLogin" name="login" value="{{ user.login }}">
 			</div>
 			
-			{% if user.nameError is not empty %}
+			{% if user.loginError is not empty %}
 				<p class="errorStyle">{{ user.loginError }}</p>
 			{% endif %}
 			
@@ -63,7 +63,7 @@
 				<input type="password" class="form-control" placeholder="Repeat user - password" aria-label="UserP" name="password2"/>
 			</div>
 			
-			{% if user.nameError is not empty %}
+			{% if user.passwordError is not empty %}
 				<p class="errorStyle">{{ user.passwordError }}</p>
 			{% endif %}
 			

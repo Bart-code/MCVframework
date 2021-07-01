@@ -24,8 +24,9 @@ class User extends \Core\Model
     {
         $this->validate();
 
-        if (empty($this->nameError)) {
-
+        if(empty($this->nameError) && empty($this->lastNameError) && empty($this->emailError)
+			&& empty($this->loginError) && empty($this->passwordError))
+		{
             $password_hash = password_hash($this->password1, PASSWORD_DEFAULT);
 
             $sql = 'INSERT INTO users
@@ -48,21 +49,25 @@ class User extends \Core\Model
 
     public function validate()
     {
-        // Name
-        if ($this->name == '') {
-            $this->nameError =  'Name is required';
-        }
+        
 		
 		// last name
-        if ($this->lastName == '') {
+        if ($this->lastName == '')
+		{
             $this->lastNameError = 'Last name is required';
+        }
+		
+		// Name
+        if ($this->name == '')
+		{
+            $this->nameError =  'Name is required';
         }
 
         // email address
         if (filter_var($this->email, FILTER_VALIDATE_EMAIL) === false) {
             $this->emailError = 'Invalid email';
         }
-        else if (static::emailExists($this->email, $this->id ?? null)) {
+        elseif (static::emailExists($this->email, $this->id ?? null)) {
             $this->emaiError = 'email already taken';
         }
 		
@@ -70,25 +75,26 @@ class User extends \Core\Model
         if ($this->login == '') {
             $this->loginError = 'Login is required';
         }
-		else
+		elseif (strlen($this->login) < 6)
 		{
-			if (strlen($this->login) < 6) {
-                $this->loginError = 'Please enter at least 6 characters for the login';
-            }
+            $this->loginError = 'Please enter at least 6 characters for the login';
 		}
 
         // Password 
         if (isset($this->password1))
 		{
-            if (strlen($this->password1) < 6) {
+            if (strlen($this->password1) < 6)
+			{
                 $this->passwordError = 'Please enter at least 6 characters for the password';
             }
 
-            if (preg_match('/.*[a-z]+.*/i', $this->password1) == 0) {
+            if (preg_match('/.*[a-z]+.*/i', $this->password1) == 0)
+			{
                 $this->passwordError = 'Password needs at least one letter';
             }
 
-            if (preg_match('/.*\d+.*/i', $this->password1) == 0) {
+            if (preg_match('/.*\d+.*/i', $this->password1) == 0)
+			{
                 $this->passwordError = 'Password needs at least one number';
             }
 			
