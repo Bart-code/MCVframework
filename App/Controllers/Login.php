@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Admin;
+namespace App\Controllers;
 
 /**
  * User admin controller
@@ -26,7 +26,7 @@ class Users extends \Core\Controller
      *
      * @return void
      */
-    public function indexAction()
+    public function loginAction()
     {
         echo 'User admin index';
     }

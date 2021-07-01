@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block header2 %}<h2 > Make life easier </h2>{% endblock %}
+
+{% block body %}
+
+    <div class="container bg-container">
+		<form class="mainPanel col-sm-8 col-md-6 p-4 mt-4"
+			action="check" method="post">
+			<div class="row ">
+				Name:
+			</div>
+			<div class="row" >
+				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName" name="userName">
+			</div>
+			<div class="row rowMargin">
+				Last name:
+			</div>
+			<div class="row" >
+				<input type="text" class="form-control" placeholder="User - last name" aria-label="UserLastName" name="userLastName">
+			</div>
+			<div class="row rowMargin">
+				E-mail address:
+			</div>
+			<div class="row " >
+				<input type="text" class="form-control" placeholder="User - name" aria-label="UserEmail" name="userEmail">
+			</div>
+			<div class="row rowMargin">
+				Login:
+			</div>
+			<div class="row" >
+				<input type="text" class="form-control" placeholder="User - login" aria-label="UserLogin" name="userLogin">
+			</div>
+			<div class="row rowMargin">
+				Password
+			</div>
+			<div class="row" >
+				<input type="password" class="form-control" placeholder="User - password" aria-label="UserP" name="userPassword1" />
+			</div>
+			<div class="row mt-2">
+				<input type="password" class="form-control" placeholder="Repeat user - password" aria-label="UserP" name="userPassword2"/>
+			</div>
+			
+			<div class="row mt-5">
+				<div class="col-sm ">
+					<a class="btn buttonsStyle" href="/Home/index" role="button">
+						<i class="icon-left-big"></i> Back
+					</a>
+				</div>
+				<div class="col-sm ">
+					<input type="submit" class="btn buttonsStyle" value="Submit"</a>
+				</div>
+			</div>
+		</form>
+	</div>
+
+{% endblock %}
