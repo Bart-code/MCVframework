@@ -8,7 +8,6 @@ body
 }
 
 
-
 h1
 {
 	font-size: 60px;
@@ -88,7 +87,7 @@ h2
 .errorStyle
 {
 	color: red; 
-	font-size: 18px;
+	font-size: 14px;
 }
 
 .modalStyle
