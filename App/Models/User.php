@@ -49,8 +49,6 @@ class User extends \Core\Model
 
     public function validate()
     {
-        
-		
 		// last name
         if ($this->lastName == '')
 		{
@@ -104,7 +102,7 @@ class User extends \Core\Model
 			}
         }
     }
-	
+
 	public static function emailExists($email, $ignore_id = null)
     {
         $user = static::findByEmail($email);
@@ -133,19 +131,40 @@ class User extends \Core\Model
 
         return $stmt->fetch();
     }
-
-    public static function authenticate($email, $password)
+	
+	public static function findByLogin($login)
     {
-        $user = static::findByEmail($email);
+        $sql = 'SELECT * FROM users WHERE login = :login';
 
-        //if ($user) {
-        if ($user && $user->is_active) {
-            if (password_verify($password, $user->password_hash)) {
-                return $user;
-            }
-        }
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':login', $login, PDO::PARAM_STR);
 
-        return false;
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+        $stmt->execute();
+
+        return $stmt->fetch();
+    }
+
+    public static function authenticate($login, $password)
+    {
+        $user = static::findByLogin($login);
+		
+		if($user)
+		{
+			if (password_verify($password, $user->password_hash))
+			{
+				return true;
+			}
+			$passwordError="Incorrect password";
+			return false;
+		}
+		else
+		{
+			$loginError="Incorrect login";
+			return false;
+		}
     }
 
     public static function findByID($id)
