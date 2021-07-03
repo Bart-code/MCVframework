@@ -6,12 +6,12 @@
 
     <div class="container bg-container">
 		<div class=" mainPanel col-sm-8 col-md-6 p-4 mt-4" >
-			<form action="Signin/login" method="post">
+			<form action="/Signin/login" method="post">
 				<div class="row ">
 					Login:
 				</div>
 				<div class="row ">
-					<input type="text" name="login" class="form-control" placeholder="User - login" aria-label="Username">
+					<input type="text" name="login" class="form-control" placeholder="User - login" aria-label="Username" value="{{ user.login }}">
 				</div>
 				
 				{% if user.loginError is not empty %}
@@ -31,7 +31,7 @@
 			
 				<div class="row rowMargin">
 					<div class="col-sm ">
-						<a class="btn buttonsStyle" href="signup/new" role="button">Registration</a>
+						<a class="btn buttonsStyle" href="/signup/new" role="button">Registration</a>
 					</div>
 					<div class="col-sm ">
 						<input type="submit" class="btn buttonsStyle" value="Login"/>

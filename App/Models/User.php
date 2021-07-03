@@ -147,7 +147,7 @@ class User extends \Core\Model
         return $stmt->fetch();
     }
 
-    public static function authenticate($login, $password)
+    public  function authenticate($login, $password)
     {
         $user = static::findByLogin($login);
 		
@@ -157,12 +157,12 @@ class User extends \Core\Model
 			{
 				return true;
 			}
-			$passwordError="Incorrect password";
+			$this->passwordError='Incorrect password';
 			return false;
 		}
 		else
 		{
-			$loginError="Incorrect login";
+			$this->loginError = 'Incorrect login';
 			return false;
 		}
     }

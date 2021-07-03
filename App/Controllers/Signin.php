@@ -17,7 +17,8 @@ class Signin extends \Core\Controller
     {
         $user = new User($_POST);
 
-        if ($user  && $user->authenticate( $user->login, $user->password )) {
+        if ($user  && $user->authenticate( $user->login, $user->password )) 
+		{
             $this->redirect('/signin/success');
         } 
 		else
@@ -28,6 +29,6 @@ class Signin extends \Core\Controller
 	
 	public function successAction()
     {
-        View::renderTemplate('MainSite/success.html');
+        View::renderTemplate('MainSite/mainSite.html');
     }
 }
