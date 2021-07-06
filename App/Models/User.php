@@ -132,19 +132,21 @@ class User extends \Core\Model
         return $stmt->fetch();
     }
 	
-	public static function findByLogin($login)
+	public static function getIdByLogin($login)
     {
-        $sql = 'SELECT * FROM users WHERE login = :login';
+        $sql = "SELECT * FROM users WHERE login = :login";
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':login', $login, PDO::PARAM_STR);
-
-        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
-
-        $stmt->execute();
-
-        return $stmt->fetch();
+		
+        if( $stmt->execute() )
+		{
+			$user = $stmt->fetch(PDO::FETCH_ASSOC);
+			return  $user['id'];
+		}
+		else return 88;
+		
     }
 
     public  function authenticate($login, $password)
