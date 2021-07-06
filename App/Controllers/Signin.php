@@ -10,7 +10,7 @@ class Signin extends \Core\Controller
 
     protected function before()
     {
-        
+        session_start();
     }
 	
 	public function loginAction()
@@ -19,6 +19,7 @@ class Signin extends \Core\Controller
 
         if ($user  && $user->authenticate( $user->login, $user->password )) 
 		{
+			$_SESSION['loggedUserId']=$user->getIdByLogin($user->login);
             $this->redirect('/signin/success');
         } 
 		else

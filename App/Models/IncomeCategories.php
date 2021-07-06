@@ -24,4 +24,15 @@ class IncomeCategories extends \Core\Model
 
         return $stmt->execute();
     }
+	
+	public function getCategoriesById($userId)
+	{
+		$sql = "SELECT * FROM incomes_category_assigned_to_users WHERE user_id = :userId";
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
+		$stmt->execute();
+		return $stmt->fetch(PDO::FETCH_ASSOC);
+	}
 }

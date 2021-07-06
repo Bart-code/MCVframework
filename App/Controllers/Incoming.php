@@ -4,12 +4,13 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Models\Income;
+use \App\Models\IncomeCategories;
 
 class Incoming extends \Core\Controller
 {
     protected function before()
     {
-        
+        session_start();
     }
 	
 	public function getItemsAction()
@@ -19,13 +20,22 @@ class Incoming extends \Core\Controller
 
 	public function newAction()
     {
-      View::renderTemplate('Incoming/new.html');
+		$categories=static::loadCategories();
+		View::renderTemplate('Incoming/new.html', ['categories' => $categories]);
     }
 	
 	public function addAction()
     {
         $income= new Income($_POST);
     }
+	
+	public static function loadCategories()
+	{
+		$userId=$_SESSION['loggedUserId'];
+		$incomeCategories = new IncomeCategories($userId);
+		$categories=$incomeCategories-> getCategoriesById($userId) ;
+		return $categories;
+	}
 	
 	public function successAction()
     {
