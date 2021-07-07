@@ -13,34 +13,22 @@
 			var today = now.getFullYear() + '-' + month + '-' + day;
 			document.getElementById("dateField").value = today;
 		}
+		window.onload = setTimeToField;
 	</script>	
+
 {% endblock %}
 	
 {% block header2 %}<h2 > Make life easier </h2>{% endblock %}
 
 {% block body %}
+	<script>
+			$(document).ready(function() 
+			{
+				setTimeToField();
+			}
+		</script>
 
-	<div class="container bg-container">
-		<!-- Modal -->
-			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			  <div class="modal-dialog" role="document">
-				<div class="modal-content">
-				  <div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					  <span aria-hidden="true">&times;</span>
-					</button>
-				  </div>
-				  <div class="modal-body">
-					...
-				  </div>
-				  <div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				  </div>
-				</div>
-			  </div>
-			</div>
+	<div class="container bg-container" onload="setTimeToField()">
 		<div class=" mainPanel col-md-10 col-lg-8 p-4 mt-4">
 			<form method="post" action="add">
 				<div class="row">	
@@ -49,8 +37,12 @@
 							Amount:
 						</div>
 						<div class="row pb-2">
-							<input type="number" step="0.01" class="textField" name="amount" placeholder="Income amount" aria-label="Income">
+							<input type="number" step="0.01" class="textField" name="amount" value="0.00" aria-label="Income">
 						</div>
+						{% if income.amountError is not empty %}
+							<p class="errorStyle">{{income.amountError}}</p>
+						{% endif %}
+						
 						<div class="row pb-1">
 							Date:
 						</div>
@@ -84,7 +76,7 @@
 						</a>
 					</div>
 					<div class="col-sm ">
-						<input class="btn buttonsStyle" type="submit" value="Submit" data-toggle="modal" data-target="#exampleModal"/>
+						<input class="btn buttonsStyle" type="submit" value="Submit"/>
 					</div>
 				</div>
 			</form>
@@ -92,3 +84,4 @@
 	</div>
     
 {% endblock %}
+

@@ -46,5 +46,20 @@ class IncomeCategories extends \Core\Model
 		else $categoryMatrix[0] = "Something gone wrong";
 		return $categoryMatrix;	
 	}
+	
+	public function getCategoryId($name)
+	{
+		$sql = "SELECT id FROM incomes_category_assigned_to_users 
+		WHERE user_id = :userId AND name=:name";
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':userId', $this -> userId, PDO::PARAM_STR);
+        $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+
+		$stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		 return  $result['id'];
+	}
 
 }

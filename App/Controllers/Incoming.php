@@ -28,7 +28,11 @@ class Incoming extends \Core\Controller
     {
         $income= new Income($_POST);
 		$userId=$_SESSION['loggedUserId'];
+		$incomeCategories = new IncomeCategories($userId);
+		$categoryId = $incomeCategories -> getCategoryId($income->item);
 		$income->setUserId($userId);
+		$income->setCategoryId($categoryId);
+		
 		if( $income->save() )
 		{
 			View::renderTemplate('Incoming/success.html');
@@ -36,7 +40,7 @@ class Incoming extends \Core\Controller
 		else
 		{
 			$categories=static::loadCategories();
-			View::renderTemplate('Incoming/new.html', ['categories' => $categories]);
+			View::renderTemplate('Incoming/new.html', ['categories' => $categories, 'income' => $income]);
 		}
     }
 	
