@@ -46,4 +46,5 @@ class IncomeCategories extends \Core\Model
 		else $categoryMatrix[0] = "Something gone wrong";
 		return $categoryMatrix;	
 	}
+
 }

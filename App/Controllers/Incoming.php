@@ -27,6 +27,17 @@ class Incoming extends \Core\Controller
 	public function addAction()
     {
         $income= new Income($_POST);
+		$userId=$_SESSION['loggedUserId'];
+		$income->setUserId($userId);
+		if( $income->save() )
+		{
+			View::renderTemplate('Incoming/success.html');
+		}
+		else
+		{
+			$categories=static::loadCategories();
+			View::renderTemplate('Incoming/new.html', ['categories' => $categories]);
+		}
     }
 	
 	public static function loadCategories()
@@ -39,7 +50,7 @@ class Incoming extends \Core\Controller
 	
 	public function successAction()
     {
-        //View::renderTemplate('Signup/success.html');
+        View::renderTemplate('MainSite/mainSite.html');
     }
 
 }
