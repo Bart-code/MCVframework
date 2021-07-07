@@ -62,7 +62,9 @@
 						</div>
 						<div class="row pb-2">
 							<select id="Item" class="textField" name="item" >
-
+								{% for name in categories %}
+									<option>{{name}}</option>
+								{% endfor %}
 							</select>
 						</div>
 					</div>
@@ -87,7 +89,6 @@
 				</div>
 			</form>
 		</div>
-		{{categories.name}}
 	</div>
     
 {% endblock %}

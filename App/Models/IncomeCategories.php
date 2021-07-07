@@ -32,7 +32,18 @@ class IncomeCategories extends \Core\Model
         $db = static::getDB();
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
+
 		$stmt->execute();
-		return $stmt->fetch(PDO::FETCH_ASSOC);
+		if($stmt->rowCount())
+		{
+			$rowsCount=$stmt->rowCount();
+			for($i=0;$i<$rowsCount;$i++)
+			{
+				$row =  $stmt->fetch(PDO::FETCH_ASSOC);
+				$categoryMatrix[$i] = $row['name'];
+			}
+		}
+		else $categoryMatrix[0] = "Something gone wrong";
+		return $categoryMatrix;	
 	}
 }
