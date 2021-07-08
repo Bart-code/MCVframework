@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+	<script>
+		function setTimeToField() {
+			var now = new Date();
+			var month = (now.getMonth() + 1);               
+			var day = now.getDate();
+			if (month < 10) 
+				month = "0" + month;
+			if (day < 10) 
+				day = "0" + day;
+			var today = now.getFullYear() + '-' + month + '-' + day;
+			document.getElementById("dateField").value = today;
+		}
+		window.onload = setTimeToField;
+	</script>	
+
+{% endblock %}
+	
+{% block header2 %}<h2 > Make life easier </h2>{% endblock %}
+
+{% block body %}
+	<script>
+			$(document).ready(function() 
+			{
+				setTimeToField();
+			}
+		</script>
+
+	<div class="container bg-container" onload="setTimeToField()">
+		<div class=" mainPanel col-md-10 col-lg-8 p-4 mt-4">
+			<form method="post" action="add">
+				<div class="row">	
+					<div class="col-md-5 col-sm-10 mx-auto">
+						<div class="row pb-1">
+							Amount:
+						</div>
+						<div class="row pb-2">
+							<input type="number" step="0.01" class="textField" name="amount" value="0.00" aria-label="Income">
+						</div>
+						{% if income.amountError is not empty %}
+							<p class="errorStyle">{{income.amountError}}</p>
+						{% endif %}
+						
+						<div class="row pb-1">
+							Date:
+						</div>
+						<div class="row pb-2">
+							<input type="date" class="textField" name="date"  id="dateField" aria-label="Date">
+						</div>
+						<div class="row pb-1">
+							Item:
+						</div>
+						<div class="row pb-2">
+							<select id="Item" class="textField" name="item" >
+								{% for name in categories %}
+									<option>{{name}}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+					<div class="col-md-5 col-sm-10 mx-auto">
+						<div class="row pb-1">
+							Comment:
+						</div>
+						<div class="row">
+							<textarea class="textField textarea" name="comment" > </textarea>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-5">
+					<div class="col-sm">
+						<a class="btn buttonsStyle" href="index.php" role="button">
+							<i class="icon-left-big"></i> Back
+						</a>
+					</div>
+					<div class="col-sm ">
+						<input class="btn buttonsStyle" type="submit" value="Submit"/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+    
+{% endblock %}
+
