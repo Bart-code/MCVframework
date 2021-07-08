@@ -5,7 +5,7 @@ namespace App\Models;
 use PDO;
 use \Core\View;
 
-class IncomeCategories extends \Core\Model
+class ExpenseCategories extends \Core\Model
 {
 	protected $userId;
 
@@ -16,7 +16,7 @@ class IncomeCategories extends \Core\Model
 
     public function save()
     {
-		$sql = 'INSERT INTO incomes_category_assigned_to_users(`id`, `user_Id`, `name`) SELECT NULL, :userId, incomes_category_default.name FROM incomes_category_default';
+		$sql = 'INSERT INTO expenses_category_assigned_to_users(`id`, `user_Id`, `name`) SELECT NULL, :userId, expenses_category_default.name FROM expenses_category_default';
 		$db = static::getDB();
         $stmt = $db->prepare($sql);
 		
@@ -27,7 +27,7 @@ class IncomeCategories extends \Core\Model
 	
 	public function getCategoriesById($userId)
 	{
-		$sql = "SELECT * FROM incomes_category_assigned_to_users WHERE user_id = :userId";
+		$sql = "SELECT * FROM expenses_category_assigned_to_users WHERE user_id = :userId";
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
@@ -49,7 +49,7 @@ class IncomeCategories extends \Core\Model
 	
 	public function getCategoryId($name)
 	{
-		$sql = "SELECT id FROM incomes_category_assigned_to_users 
+		$sql = "SELECT id FROM expenses_category_assigned_to_users 
 		WHERE user_id = :userId AND name=:name";
 
         $db = static::getDB();
