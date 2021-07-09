@@ -47,7 +47,7 @@ class PaymentMethods extends \Core\Model
 		return $methodsMatrix;	
 	}
 	
-	public function getCategoryId($name)
+	public function getpaymentMethodId($name)
 	{
 		$sql = "SELECT id FROM payment_methods_assigned_to_users 
 		WHERE user_id = :userId AND name=:name";

@@ -31,9 +31,14 @@ class Expensing extends \Core\Controller
         $expense= new Expense($_POST);
 		$userId=$_SESSION['loggedUserId'];
 		$expenseCategories = new ExpenseCategories($userId);
-		$categoryId = $expenseCategories -> getCategoryId($income->item);
+		$paymentMethod = new PaymentMethods($userId);
+		
+		$categoryId = $expenseCategories -> getCategoryId($expense->item);
+		$paymentMethodId = $paymentMethod -> getpaymentMethodId($expense->paymentMethod);
+		
 		$expense->setUserId($userId);
 		$expense->setCategoryId($categoryId);
+		$expense->setPaymentMethodId($paymentMethodId);
 		
 		if( $expense->save() )
 		{
