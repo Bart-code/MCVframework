@@ -5,6 +5,8 @@ namespace App\Controllers;
 use \Core\View;
 use \App\Models\User;
 use \App\Models\IncomeCategories;
+use \App\Models\ExpenseCategories;
+use \App\Models\PaymentMethods;
 
 class Signup extends \Core\Controller
 {
@@ -24,21 +26,24 @@ class Signup extends \Core\Controller
     {
         $user = new User($_POST);
 
-        if ($user->save()) {
+        if ($user->save())
+		{
 			$userId=$user->getIdByLogin($user->login);
 			$incomeCategories = new IncomeCategories($userId);
+			$expenseCategories = new ExpenseCategories($userId);
+			$paymentMethods = new PaymentMethods($userId);
 			$incomeCategories->save();
+			$expenseCategories->save();
+			$paymentMethods->save();
 			View::renderTemplate('Signup/success.html',[
                 'user' => $user
             ]);
-            //$this->redirect('/signup/success');
-
-        } else {
-
+        }
+		else
+		{
             View::renderTemplate('Signup/new.html', [
                 'user' => $user
             ]);
-
         }
     }
 	
