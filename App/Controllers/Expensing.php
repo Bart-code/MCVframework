@@ -3,10 +3,11 @@
 namespace App\Controllers;
 
 use \Core\View;
-use \App\Models\Income;
-use \App\Models\IncomeCategories;
+use \App\Models\Expense;
+use \App\Models\ExpenseCategories;
+use \App\Models\PaymentMethods;
 
-class Incoming extends \Core\Controller
+class Expensing extends \Core\Controller
 {
     protected function before()
     {
@@ -21,34 +22,44 @@ class Incoming extends \Core\Controller
 	public function newAction()
     {
 		$categories=static::loadCategories();
-		View::renderTemplate('Incoming/new.html', ['categories' => $categories]);
+		$methods=static::loadPaymentMethods();
+		View::renderTemplate('Expensing/new.html', ['paymentMethods' => $methods, 'categories' => $categories]);
     }
 	
 	public function addAction()
     {
-        $income= new Income($_POST);
+        $expense= new Expense($_POST);
 		$userId=$_SESSION['loggedUserId'];
-		$incomeCategories = new IncomeCategories($userId);
-		$categoryId = $incomeCategories -> getCategoryId($income->item);
-		$income->setUserId($userId);
-		$income->setCategoryId($categoryId);
+		$expenseCategories = new ExpenseCategories($userId);
+		$categoryId = $expenseCategories -> getCategoryId($income->item);
+		$expense->setUserId($userId);
+		$expense->setCategoryId($categoryId);
 		
-		if( $income->save() )
+		if( $expense->save() )
 		{
-			View::renderTemplate('Incoming/success.html');
+			View::renderTemplate('Expensing/success.html');
 		}
 		else
 		{
 			$categories=static::loadCategories();
-			View::renderTemplate('Incoming/new.html', ['categories' => $categories, 'income' => $income]);
+			$paymentMethods=static::loadPaymentMethods();
+			View::renderTemplate('Expensing/new.html', ['paymentMethods' =>$paymentMethods,'categories' => $categories, 'expense' => $expense]);
 		}
     }
+	
+	public static function loadPaymentMethods()
+	{
+		$userId=$_SESSION['loggedUserId'];
+		$paymentMethods = new PaymentMethods($userId);
+		$methods=$paymentMethods-> getMethodsById($userId) ;
+		return $methods;
+	}
 	
 	public static function loadCategories()
 	{
 		$userId=$_SESSION['loggedUserId'];
-		$incomeCategories = new IncomeCategories($userId);
-		$categories=$incomeCategories-> getCategoriesById($userId) ;
+		$expenseCategories = new ExpenseCategories($userId);
+		$categories=$expenseCategories-> getCategoriesById($userId) ;
 		return $categories;
 	}
 	

@@ -6,7 +6,7 @@ use \Core\View;
 use \App\Models\User;
 use \App\Models\IncomeCategories;
 use \App\Models\ExpenseCategories;
-use \App\Models\PaymentCategories;
+use \App\Models\PaymentMethods;
 
 class Signup extends \Core\Controller
 {
@@ -31,10 +31,10 @@ class Signup extends \Core\Controller
 			$userId=$user->getIdByLogin($user->login);
 			$incomeCategories = new IncomeCategories($userId);
 			$expenseCategories = new ExpenseCategories($userId);
-			$paymentCategories = new PaymentCategories($userId);
+			$paymentMethods = new PaymentMethods($userId);
 			$incomeCategories->save();
 			$expenseCategories->save();
-			$paymentCategories->save();
+			$paymentMethods->save();
 			View::renderTemplate('Signup/success.html',[
                 'user' => $user
             ]);

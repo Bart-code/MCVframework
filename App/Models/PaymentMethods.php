@@ -5,7 +5,7 @@ namespace App\Models;
 use PDO;
 use \Core\View;
 
-class PaymentCategories extends \Core\Model
+class PaymentMethods extends \Core\Model
 {
 	protected $userId;
 
@@ -25,7 +25,7 @@ class PaymentCategories extends \Core\Model
         return $stmt->execute();
     }
 	
-	public function getCategoriesById($userId)
+	public function getMethodsById($userId)
 	{
 		$sql = "SELECT * FROM payment_methods_assigned_to_users WHERE user_id = :userId";
 
@@ -40,11 +40,11 @@ class PaymentCategories extends \Core\Model
 			for($i=0;$i<$rowsCount;$i++)
 			{
 				$row =  $stmt->fetch(PDO::FETCH_ASSOC);
-				$categoryMatrix[$i] = $row['name'];
+				$methodsMatrix[$i] = $row['name'];
 			}
 		}
-		else $categoryMatrix[0] = "Something gone wrong";
-		return $categoryMatrix;	
+		else $methodsMatrix[0] = "Something gone wrong";
+		return $methodsMatrix;	
 	}
 	
 	public function getCategoryId($name)

@@ -18,17 +18,11 @@
 
 {% endblock %}
 	
-{% block header2 %}<h2 > Make life easier </h2>{% endblock %}
+{% block header2 %}<h2 > Add expense </h2>{% endblock %}
 
 {% block body %}
-	<script>
-			$(document).ready(function() 
-			{
-				setTimeToField();
-			}
-		</script>
 
-	<div class="container bg-container" onload="setTimeToField()">
+	<div class="container bg-container">
 		<div class=" mainPanel col-md-10 col-lg-8 p-4 mt-4">
 			<form method="post" action="add">
 				<div class="row">	
@@ -37,10 +31,10 @@
 							Amount:
 						</div>
 						<div class="row pb-2">
-							<input type="number" step="0.01" class="textField" name="amount" value="0.00" aria-label="Income">
+							<input type="number" step="0.01" class="textField" name="amount" value="0.00" aria-label="Expense">
 						</div>
-						{% if income.amountError is not empty %}
-							<p class="errorStyle">{{income.amountError}}</p>
+						{% if expense.amountError is not empty %}
+							<p class="errorStyle">{{expense.amountError}}</p>
 						{% endif %}
 						
 						<div class="row pb-1">
@@ -48,6 +42,16 @@
 						</div>
 						<div class="row pb-2">
 							<input type="date" class="textField" name="date"  id="dateField" aria-label="Date">
+						</div>
+						<div class="row pb-1">
+							Payment type:
+						</div>
+						<div class="row pb-2" >
+							<select class="textField" name="payment" >
+								{% for name in paymentMethods %}
+									<option>{{name}}</option>
+								{% endfor %}
+							</select>
 						</div>
 						<div class="row pb-1">
 							Item:
