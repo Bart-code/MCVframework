@@ -22,7 +22,11 @@ class Balancing extends \Core\Controller
 	
 	public function showAction()
     {
-      
+		$selector=$_POST['timeSelector'];
+		$downBorder=$_POST['downBorder'];
+		$topBorder=$_POST['topBorder'];
+		
+		View::renderTemplate('Balancing/show.html', [ 'selector' => $selector, 'downBorder' => $downBorder, 'topBorder' =>  $topBorder] );
     }
 
 }

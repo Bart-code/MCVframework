@@ -17,16 +17,12 @@
 			switch(selectorValue)
 			{
 				case "Current month":
-					document.getElementById("topDateBorder").disabled = true;
-					document.getElementById("downDateBorder").disabled = true;
 					setMaxDay( month );
 					if (month < 10) month = '0' + month;
 					downBorder= year+'-'+month+'-01';
 					topBorder= year+'-'+month+'-'+maxDay;
 					break;
 				case "Previous month":
-					document.getElementById("topDateBorder").disabled = true;
-					document.getElementById("downDateBorder").disabled = true;
 					if( month != 1) month--;
 					else
 					{
@@ -39,8 +35,6 @@
 					topBorder= year+'-'+month+'-'+maxDay;
 					break;
 				case "Current year":
-					document.getElementById("topDateBorder").disabled = true;
-					document.getElementById("downDateBorder").disabled = true;
 					downBorder=year + '-01-01';
 					topBorder=year + '-12-31';
 					break;
@@ -49,10 +43,8 @@
 					document.getElementById("downDateBorder").disabled = false;
 					break;
 			}
-			
 			document.getElementById("downDateBorder").value = downBorder;
 			document.getElementById("topDateBorder").value = topBorder;
-			document.getElementById("tables").style.display='none';
 		}
 		
 		function setMaxDay( month )
@@ -68,119 +60,82 @@
 			}
 			else maxDay = 30;
 		}
-		
-		function showTables()
-		{
-			document.getElementById("tables").style.display='flex';
-		}
-		window.onload = setTimeToField;
 	</script>	
 
 {% endblock %}
 	
-{% block header2 %}<h2 > Add income </h2>{% endblock %}
+{% block header2 %}<h2 > Balance </h2>{% endblock %}
 
 {% block body %}
 
 	<div class="container bg-container">
-		<div class=" mainPanel col-md-10 col-lg-8 p-4 mt-4">
-			<div class="row">
-					<div class="col-md-5 col-sm-10 mx-auto">			
+		<div class=" mainPanel col-md-12 col-lg-8 p-4 mt-4">
+			<form method="post" action="show">
+				<div class="row">
+						<div class="col-md-5 col-sm-10 mx-auto">			
+							<div class="row pb-1">
+								Time borders:
+							</div>
+							<div class="row pb-2">
+									<select class="textField"  name="timeSelector" id="timeBordersSelector" onchange="setTimeBorders()">
+										{% if selector is not empty %} 
+											{% set chosenOption = selector %} 
+											<option selected="{{chosenOption}}" hidden="hidden">{{chosenOption}}</option>
+										{% endif %} 
+										<option>Current month</option>
+										<option>Previous month</option>
+										<option>Current year</option>
+										<option>Custom </option>
+									</select>
+							</div>
+						</div>
+						<div class="col-md-5 col-sm-10 mx-auto">
+						</div>
 						<div class="row pb-1">
-							Time borders:
-						</div>
-						<div class="row pb-2">
-							<select class="textField" id="timeBordersSelector" onchange="setTimeBorders()">
-								<option>Current month</option>
-								<option>Previous month</option>
-								<option>Current year</option>
-								<option>Custom </option>
-							</select>
-						</div>
-					</div>
-					<div class="col-md-5 col-sm-10 mx-auto">
-					</div>
-					<div class="row pb-1">
-						<div class="col-md-5 col-sm-10 mx-auto">
-							<div class="row pb-1">
-								Down border: 
+							<div class="col-md-5 col-sm-10 mx-auto">
+								<div class="row pb-1">
+									Down border: 
+								</div>
+								<div class="row pb-2">
+									<input type="date" name="downBorder" class="textField timeBorders" id="downDateBorder" value='{{downBorder}}'/>
+								</div>
 							</div>
-							<div class="row pb-2">
-								<input type="date" class="textField timeBorders" id="downDateBorder" />
+							<div class="col-md-5 col-sm-10 mx-auto">
+								<div class="row pb-1">
+									Top border: 
+								</div>
+								<div class="row pb-2">
+									<input type="date" name="topBorder" class="textField timeBorders" id="topDateBorder" value='{{topBorder}}'  />
+								</div>
+								{% if topBorder is empty %} 
+									<script>setTimeBorders();</script>
+								{% endif %} 
 							</div>
 						</div>
-						<div class="col-md-5 col-sm-10 mx-auto">
-							<div class="row pb-1">
-								Top border: 
-							</div>
-							<div class="row pb-2">
-								<input type="date" class="textField timeBorders" id="topDateBorder" />
-							</div>
-						</div>
-					</div>
-					<div class="row pb-1 mt-3 ">
+						<div class="row pb-1 mt-3 ">
 							<div class="w-50px">
-								<button type="button" class= "btn buttonsStyle" onclick="showTables()">
-									Show balance
-								</button>
+								<input type="submit" class= "btn buttonsStyle" value="Show balance" />
 							</div>
-					</div>
-			</div>
-		
-			<div class="row mt-4"  id="tables">
-				<div class="col-md-5 col-sm-10 mx-auto">
+						</div>
+				</div>
+			</form>
+			
+			{% if selector is not empty %}
+				<div class="col-md-6 col-sm-10 mx-auto">
 					<div class="row">
 						Incomes:
 					</div>
-					<div class="row">
-						<table>
-							<thead>
-								<tr>
-									<th>Category</th>
-									<th>Sum amount zł</th>
-								</tr>
-							</thead>
-							<tr> 
-								<td>Category1</td> <td>10</td>
-							</tr>
-							<tr> 
-								<td>Category2</td> <td>100</td>
-							</tr>
-							<tr> 
-								<td>Category3</td> <td>1000</td>
-							</tr>
-						</table>
-					</div>
 				</div>
-				<div class="col-md-5 col-sm-10 mx-auto">
+				<div class="col-md-6 col-sm-10 mx-auto">
 					<div class="row">
 						Expenses:
 					</div>
-					<div class="row">
-							<table>
-									<thead>
-										<tr>
-											<th>Category</th>
-											<th>Sum amount zł</th>
-										</tr>
-									</thead>
-								<tr> 
-									<td>Category1</td> <td>10</td>
-								</tr>
-								<tr> 
-									<td>Category2</td> <td>100</td>
-								</tr>
-								<tr> 
-									<td>Category3</td> <td>1000</td>
-								</tr>
-							</table>
-					</div>
 				</div>
-			</div>
+			{% endif %}
 
 			<div class="row mt-5">
 				<div class="col-sm">
-					<a class="btn buttonsStyle" href="mainSite.html" role="button">
+					<a class="btn buttonsStyle" href="mainSite.php" role="button">
 						<i class="icon-left-big"></i> Back
 					</a>
 				</div>
