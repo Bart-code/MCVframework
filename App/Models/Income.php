@@ -29,8 +29,6 @@ class Income extends \Core\Model
 
     public function save()
     {
-		;
-
         if( $this->validate() )
 		{
 			$sql = 'INSERT INTO incomes
@@ -59,5 +57,4 @@ class Income extends \Core\Model
 		}
 		return true;
     }
-
 }

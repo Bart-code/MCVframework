@@ -3,8 +3,7 @@
 namespace App\Controllers;
 
 use \Core\View;
-use \App\Models\Income;
-use \App\Models\Expense;
+use \App\Models\Balance;
 use \App\Models\IncomeCategories;
 use \App\Models\ExpenseCategories;
 
@@ -25,8 +24,15 @@ class Balancing extends \Core\Controller
 		$selector=$_POST['timeSelector'];
 		$downBorder=$_POST['downBorder'];
 		$topBorder=$_POST['topBorder'];
+		$userId=$_SESSION['loggedUserId'];
+		$incomeCategories = new IncomeCategories($userId);
+		$incomeCategoriesName=$incomeCategories->getCategoriesNameByUserId($userId);
+		$incomeCategoriesId=$incomeCategories->getCategoriesIdByUserId($userId);
+		$balance=new Balance($userId, $downBorder, $topBorder);
+		$balance->getSummaryIncomeAmount($incomeCategoriesId);
+		$balance->setIncomeCategories($incomeCategoriesName);
 		
-		View::renderTemplate('Balancing/show.html', [ 'selector' => $selector, 'downBorder' => $downBorder, 'topBorder' =>  $topBorder] );
+		View::renderTemplate('Balancing/show.html', [ 'selector' => $selector, 'downBorder' => $downBorder, 'topBorder' =>  $topBorder, 'balance' => $balance]);
     }
 
 }

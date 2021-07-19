@@ -48,7 +48,7 @@ class Incoming extends \Core\Controller
 	{
 		$userId=$_SESSION['loggedUserId'];
 		$incomeCategories = new IncomeCategories($userId);
-		$categories=$incomeCategories-> getCategoriesById($userId) ;
+		$categories=$incomeCategories-> getCategoriesNameByUserId($userId) ;
 		return $categories;
 	}
 	

@@ -25,7 +25,7 @@ class IncomeCategories extends \Core\Model
         return $stmt->execute();
     }
 	
-	public function getCategoriesById($userId)
+	public function getCategoriesNameByUserId($userId)
 	{
 		$sql = "SELECT * FROM incomes_category_assigned_to_users WHERE user_id = :userId";
 
@@ -40,11 +40,33 @@ class IncomeCategories extends \Core\Model
 			for($i=0;$i<$rowsCount;$i++)
 			{
 				$row =  $stmt->fetch(PDO::FETCH_ASSOC);
-				$categoryMatrix[$i] = $row['name'];
+				$categoryVector[$i] = $row['name'];
 			}
 		}
-		else $categoryMatrix[0] = "Something gone wrong";
-		return $categoryMatrix;	
+		else $categoryVector[0] = "Something gone wrong";
+		return $categoryVector;	
+	}
+	
+	public function getCategoriesIdByUserId($userId)
+	{
+		$sql = "SELECT * FROM incomes_category_assigned_to_users WHERE user_id = :userId";
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
+
+		$stmt->execute();
+		if($stmt->rowCount())
+		{
+			$rowsCount=$stmt->rowCount();
+			for($i=0;$i<$rowsCount;$i++)
+			{
+				$row =  $stmt->fetch(PDO::FETCH_ASSOC);
+				$categoryVector[$i] = $row['id'];
+			}
+		}
+		else $categoryVector[0] = "Something gone wrong";
+		return $categoryVector;	
 	}
 	
 	public function getCategoryId($name)
