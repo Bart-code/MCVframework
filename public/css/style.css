@@ -7,7 +7,6 @@ body
 	font-family: 'Roboto Slab', serif;
 }
 
-
 h1
 {
 	font-size: 60px;
@@ -22,6 +21,10 @@ h2
 	margin: 5px;
 }
 
+table
+{
+	font-size: 18px;
+}
 .mainPanel
 {
 	background-color:#30B2C7;
