@@ -32,4 +32,10 @@ class Signin extends \Core\Controller
     {
         View::renderTemplate('MainSite/mainSite.html');
     }
+	
+	public function loggoutAction()
+	{
+		session_unset();
+		View::renderTemplate('Home/index.html');
+	}
 }
