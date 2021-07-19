@@ -25,12 +25,20 @@ class Balancing extends \Core\Controller
 		$downBorder=$_POST['downBorder'];
 		$topBorder=$_POST['topBorder'];
 		$userId=$_SESSION['loggedUserId'];
+		
 		$incomeCategories = new IncomeCategories($userId);
 		$incomeCategoriesName=$incomeCategories->getCategoriesNameByUserId($userId);
 		$incomeCategoriesId=$incomeCategories->getCategoriesIdByUserId($userId);
+		
+		$expenseCategories = new ExpenseCategories($userId);
+		$expenseCategoriesName=$expenseCategories->getCategoriesNameByUserId($userId);
+		$expenseCategoriesId=$expenseCategories->getCategoriesIdByUserId($userId);
+		
 		$balance=new Balance($userId, $downBorder, $topBorder);
 		$balance->getSummaryIncomeAmount($incomeCategoriesId);
+		$balance->getSummaryExpenseAmount($expenseCategoriesId);
 		$balance->setIncomeCategories($incomeCategoriesName);
+		$balance->setExpenseCategories($expenseCategoriesName);
 		
 		View::renderTemplate('Balancing/show.html', [ 'selector' => $selector, 'downBorder' => $downBorder, 'topBorder' =>  $topBorder, 'balance' => $balance]);
     }

@@ -25,7 +25,7 @@ class ExpenseCategories extends \Core\Model
         return $stmt->execute();
     }
 	
-	public function getCategoriesById($userId)
+	public function getCategoriesNameByUserId($userId)
 	{
 		$sql = "SELECT * FROM expenses_category_assigned_to_users WHERE user_id = :userId";
 
@@ -45,6 +45,28 @@ class ExpenseCategories extends \Core\Model
 		}
 		else $categoryMatrix[0] = "Something gone wrong";
 		return $categoryMatrix;	
+	}
+	
+	public function getCategoriesIdByUserId($userId)
+	{
+		$sql = "SELECT * FROM expenses_category_assigned_to_users WHERE user_id = :userId";
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':userId', $userId, PDO::PARAM_STR);
+
+		$stmt->execute();
+		if($stmt->rowCount())
+		{
+			$rowsCount=$stmt->rowCount();
+			for($i=0;$i<$rowsCount;$i++)
+			{
+				$row =  $stmt->fetch(PDO::FETCH_ASSOC);
+				$categoryVector[$i] = $row['id'];
+			}
+		}
+		else $categoryVector[0] = "Something gone wrong";
+		return $categoryVector;	
 	}
 	
 	public function getCategoryId($name)

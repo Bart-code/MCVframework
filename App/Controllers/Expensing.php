@@ -64,7 +64,7 @@ class Expensing extends \Core\Controller
 	{
 		$userId=$_SESSION['loggedUserId'];
 		$expenseCategories = new ExpenseCategories($userId);
-		$categories=$expenseCategories-> getCategoriesById($userId) ;
+		$categories=$expenseCategories-> getCategoriesNameByUserId($userId) ;
 		return $categories;
 	}
 	
