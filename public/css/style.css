@@ -25,6 +25,13 @@ table
 {
 	font-size: 18px;
 }
+
+#piechart
+{
+	 width: 400px;
+	 height: 300px;
+	 background-color:#30B2C7;
+}
 .mainPanel
 {
 	background-color:#30B2C7;

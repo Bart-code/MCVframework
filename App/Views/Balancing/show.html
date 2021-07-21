@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block scripts %}
+	
 	<script>
 		var maxDay;
 		var year;
@@ -61,6 +62,9 @@
 			else maxDay = 30;
 		}
 	</script>	
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript"  src="/js/circleDiagram.js"></script>
+     
 
 {% endblock %}
 	
@@ -121,6 +125,7 @@
 			</form>
 			<div class="row mt-4" >
 				{% if selector is not empty %}
+					<script> var tablica =  document.getElementsByName(balance.incomeCategoryNames);</script>
 					<div class="col-md-5 col-sm-10 mx-auto">
 						<div class="row">
 							Incomes:
@@ -145,6 +150,7 @@
 								{% endfor %}
 							</table>
 						</div>
+						<div id="piechart"></div>
 					</div>
 					<div class="col-md-5 col-sm-10 mx-auto">
 						<div class="row">
@@ -184,6 +190,7 @@
 			</div>
 		</div>
 	</div>
+	
     
 {% endblock %}
 
