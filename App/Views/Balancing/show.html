@@ -64,23 +64,34 @@
 		}
 	</script>	
 	
-	<!-- array settings for diagram -->
+	<!-- arrays settings for diagram -->
 	<script>
-		var namesArray  = [];
-		var amountsArray=[];
+		var incomeNamesArray  = [];
+		var expenseNamesArray  = [];
+		var incomeAmountsArray=[];
+		var expenseAmountsArray=[];
 
 		let i=0;
 		{% for j in range(0, balance.incomeCategoryNames|length) %}
-			namesArray[ i ]= "{{ balance.incomeCategoryNames[  j ]}}";
-			amountsArray[ i ]= parseFloat( "{{ balance.incomesSummaryAmount[  j ] }}");
+			incomeNamesArray[ i ]= "{{ balance.incomeCategoryNames[  j ]}}";
+			incomeAmountsArray[ i ]= parseFloat( "{{ balance.incomesSummaryAmount[  j ] }}");
 			i++;
 		{% endfor %}
+		i=0;
+		
+		{% for j in range(0, balance.expenseCategoryNames|length) %}
+			expenseNamesArray[ i ]= "{{ balance.expenseCategoryNames[  j ]}}";
+			expenseAmountsArray[ i ]= parseFloat( "{{ balance.expensesSummaryAmount[  j ] }}");
+			i++;
+		{% endfor %}
+		document.write(expenseAmountsArray);
 	</script> 
 		
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	
-    <script type="text/javascript"  src="/js/DiagramIncomes.js"></script>
-    <script type="text/javascript"  src="/js/DiagramExpenses.js"></script>
+    
+    <script type="text/javascript"  src="/js/DiagramExpense.js"></script>
+	<script type="text/javascript"  src="/js/DiagramIncome.js"></script>
 
 {% endblock %}
 	
@@ -191,6 +202,7 @@
 								{% endfor %}
 							</table>
 						</div>
+						<div id="piechartExpenses"></div>
 					</div>
 				{% endif %}
 			</div>
