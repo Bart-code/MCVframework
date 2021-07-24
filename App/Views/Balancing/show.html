@@ -84,7 +84,6 @@
 			expenseAmountsArray[ i ]= parseFloat( "{{ balance.expensesSummaryAmount[  j ] }}");
 			i++;
 		{% endfor %}
-		document.write(expenseAmountsArray);
 	</script> 
 		
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -165,6 +164,7 @@
 									</tr>
 								</thead>
 								{% set i = 0 %}
+								{% set sumIncomes = 0 %}
 								{% for summaryAmounts in balance.incomesSummaryAmount%}
 										<tr>
 											{% if balance.incomesSummaryAmount[ i ] is not empty %}
@@ -172,9 +172,11 @@
 												<td>{{balance.incomesSummaryAmount[ i ]}}</td>
 											{% endif %}
 										</tr>
+										{% set sumIncomes = sumIncomes  + balance.incomesSummaryAmount[ i ]%}
 									{% set i = i + 1 %}
 								{% endfor %}
 							</table>
+							<div class="border-top mt-3">Totaly: {{sumIncomes}} zł</div>
 						</div>
 						<div id="piechartIncomes"></div>
 					</div>
@@ -191,20 +193,27 @@
 									</tr>
 								</thead>
 								{% set i = 0 %}
+								{% set sumExpenses = 0 %}
 								{% for summaryAmounts in balance.expensesSummaryAmount%}
 										<tr>
 											{% if balance.expensesSummaryAmount[ i ] is not empty %}
 												<td>{{balance.expenseCategoryNames[ i ]}}</td>
 												<td>{{balance.expensesSummaryAmount[ i ]}}</td>
 											{% endif %}
+											{% set sumExpenses = sumExpenses + balance.expensesSummaryAmount[ i ]%}
 										</tr>
 									{% set i = i + 1 %}
 								{% endfor %}
 							</table>
+							<div class="border-top mt-3">Totaly: {{sumExpenses}} zł</div>
 						</div>
 						<div id="piechartExpenses"></div>
 					</div>
 				{% endif %}
+			</div>
+			<div class="row mt-5 mx-auto">
+				{% set sumOfIncomesAndExpenses = sumIncomes - sumExpenses%}
+				Totaly balance:   {{sumIncomes}} zł - {{sumExpenses}} zł = {{sumOfIncomesAndExpenses}} zł
 			</div>
 			<div class="row mt-5">
 				<div class="col-sm">
