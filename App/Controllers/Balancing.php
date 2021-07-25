@@ -40,6 +40,7 @@ class Balancing extends \Core\Controller
 		$balance->setIncomeCategories($incomeCategoriesName);
 		$balance->setExpenseCategories($expenseCategoriesName);
 		
+		
 		View::renderTemplate('Balancing/show.html', [ 'selector' => $selector, 'downBorder' => $downBorder, 'topBorder' =>  $topBorder, 'balance' => $balance]);
     }
 
