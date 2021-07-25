@@ -11,6 +11,11 @@ class Incoming extends \Core\Controller
     protected function before()
     {
         session_start();
+		if(  !( isset($_SESSION['loggedUserId'])))
+		{
+			View::renderTemplate('Home/index.html');
+			exit();
+		}
     }
 	
 	public function getItemsAction()

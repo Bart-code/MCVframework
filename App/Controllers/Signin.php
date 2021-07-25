@@ -30,12 +30,21 @@ class Signin extends \Core\Controller
 	
 	public function successAction()
     {
+		if(  !( isset($_SESSION['loggedUserId'])))
+		{
+			View::renderTemplate('Home/index.html');
+			exit();
+		}
         View::renderTemplate('MainSite/mainSite.html');
     }
 	
 	public function loggoutAction()
 	{
-		session_unset();
 		View::renderTemplate('Home/index.html');
+		if( isset($_SESSION['loggedUserId']))
+		{
+			unset($_SESSION['loggedUserId']);
+		}
+		session_unset();
 	}
 }
