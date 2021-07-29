@@ -31,7 +31,7 @@
 							Amount:
 						</div>
 						<div class="row pb-2">
-							<input type="number" step="0.01" class="textField" name="amount" value="0.00" aria-label="Expense">
+							<input type="number" step="0.01" class="textField" name="amount" value="0.00" min="0" aria-label="Expense">
 						</div>
 						{% if expense.amountError is not empty %}
 							<p class="errorStyle">{{expense.amountError}}</p>
