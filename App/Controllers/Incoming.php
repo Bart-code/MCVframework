@@ -17,11 +17,6 @@ class Incoming extends \Core\Controller
 			exit();
 		}
     }
-	
-	public function getItemsAction()
-    {
-      
-    }
 
 	public function newAction()
     {

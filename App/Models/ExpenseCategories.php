@@ -37,7 +37,7 @@ class ExpenseCategories extends \Core\Model
 		if($stmt->rowCount())
 		{
 			$rowsCount=$stmt->rowCount();
-			for($i=0;$i<$rowsCount;$i++)
+			for( $i=0 ; $i < $rowsCount ; $i++ )
 			{
 				$row =  $stmt->fetch(PDO::FETCH_ASSOC);
 				$categoryMatrix[$i] = $row['name'];

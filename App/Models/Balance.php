@@ -16,7 +16,6 @@ class Balance extends \Core\Model
         $this->userId=$userId;
         $this->downTimeBorder=$downTimeBorder;
         $this->topTimeBorder=$topTimeBorder;
-		
     }
 	
 	public function getSummaryIncomeAmount($incomeCategoriesId)

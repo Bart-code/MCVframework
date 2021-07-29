@@ -13,10 +13,8 @@ class Signup extends \Core\Controller
 
     protected function before()
     {
-        
     }
 
-    
 	public function newAction()
     {
       View::renderTemplate('Signup/new.html');
@@ -50,11 +48,6 @@ class Signup extends \Core\Controller
 	public function successAction()
     {
         View::renderTemplate('Signup/success.html');
-    }
-	
-	public function redirectMainAction()
-    {
-        $this->redirect('');
     }
 
 }

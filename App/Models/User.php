@@ -24,8 +24,8 @@ class User extends \Core\Model
     {
         $this->validate();
 
-        if(empty($this->nameError) && empty($this->lastNameError) && empty($this->emailError)
-			&& empty($this->loginError) && empty($this->passwordError))
+        if(empty($this->nameError) and empty($this->lastNameError) and empty($this->emailError)
+			and empty($this->loginError) and empty($this->passwordError))
 		{
             $password_hash = password_hash($this->password1, PASSWORD_DEFAULT);
 
@@ -43,7 +43,6 @@ class User extends \Core\Model
 
             return $stmt->execute();
         }
-
         return false;
     }
 
@@ -65,8 +64,8 @@ class User extends \Core\Model
         if (filter_var($this->email, FILTER_VALIDATE_EMAIL) === false) {
             $this->emailError = 'Invalid email';
         }
-        elseif (static::emailExists($this->email, $this->id ?? null)) {
-            $this->emaiError = 'email already taken';
+        elseif (static::emailExists( $this->email)) {
+            $this->emailError = 'Email already exist';
         }
 		
 		// login
@@ -76,6 +75,10 @@ class User extends \Core\Model
 		elseif (strlen($this->login) < 6)
 		{
             $this->loginError = 'Please enter at least 6 characters for the login';
+		}
+		elseif( static::loginExists( $this->login) )
+		{
+			$this->loginError = 'Login already exist';
 		}
 
         // Password 
@@ -103,16 +106,23 @@ class User extends \Core\Model
         }
     }
 
-	public static function emailExists($email, $ignore_id = null)
+	public static function emailExists($email)
     {
         $user = static::findByEmail($email);
-
-        if ($user) {
-            if ($user->id != $ignore_id) {
+        if ($user != false)
+		{
                 return true;
-            }
         }
-
+        return false;
+    }
+	
+	public static function loginExists($login)
+    {
+		 $user = static::findByLogin($login);
+        if ($user != false)
+		{
+                return true;
+        }
         return false;
     }
 
@@ -124,12 +134,12 @@ class User extends \Core\Model
         $db = static::getDB();
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
-
         $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
-
-        $stmt->execute();
-
-        return $stmt->fetch();
+        if( $stmt->execute() )
+		{
+			return $stmt->fetch();
+		}
+		else return false;
     }
 	
 	public static function findByLogin($login)
@@ -139,7 +149,6 @@ class User extends \Core\Model
         $db = static::getDB();
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':login', $login, PDO::PARAM_STR);
-
         $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
 
         $stmt->execute();

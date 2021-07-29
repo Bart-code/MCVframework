@@ -70,6 +70,11 @@ table
 	background-color: #2AA8B2;
 }
 
+.error
+{
+	color: red; 
+	font-size: 14px;
+}
 
 .text-leftttt
 {

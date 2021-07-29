@@ -2,13 +2,39 @@
 
 {% block header2 %}<h2 > Make life easier </h2>{% endblock %}
 
+{% block footer %}
+	<script>
+		$(document).ready(function()
+		{
+			$('#formSignup').validate({
+			rules: {
+						name: 'required',
+						lastName: 'required',
+						email: {	required: true,
+									email: true
+								  },
+						login: {
+										required: true,
+										minlength: 6
+								 },
+						password1: {
+										required: true,
+										minlength: 6
+										},
+						password2: {
+										equalTo: '#inputPassword'
+										}		
+					 }
+			});
+        });
+    </script>
+{% endblock %}
+
 {% block body %}
 
     <div class="container bg-container">
-	
-	
 		<form class="mainPanel col-sm-8 col-md-6 p-4 mt-4"
-			action="create" method="post">
+			action="create" method="post" id="formSignup">
 			<div class="row ">
 				Name:
 			</div>
@@ -57,7 +83,7 @@
 				Password
 			</div>
 			<div class="row" >
-				<input type="password" class="form-control" placeholder="User - password" aria-label="UserP" name="password1" />
+				<input id="inputPassword" type="password" class="form-control" placeholder="User - password" aria-label="UserP" name="password1" />
 			</div>
 			<div class="row mt-2">
 				<input type="password" class="form-control" placeholder="Repeat user - password" aria-label="UserP" name="password2"/>
