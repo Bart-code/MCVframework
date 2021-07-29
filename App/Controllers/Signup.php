@@ -49,5 +49,9 @@ class Signup extends \Core\Controller
     {
         View::renderTemplate('Signup/success.html');
     }
-
+	
+	public function redirectMainAction()
+	{
+		$this->redirect('');
+	}
 }
