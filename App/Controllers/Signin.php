@@ -10,7 +10,10 @@ class Signin extends \Core\Controller
 
     protected function before()
     {
-        session_start();
+        if(!isset($_SESSION)) 
+        { 
+            session_start(); 
+        }
     }
 	
 	public function loginAction()
@@ -30,12 +33,16 @@ class Signin extends \Core\Controller
 	
 	public function successAction()
     {
-		if(  !( isset($_SESSION['loggedUserId'])))
+		if( !isset($_SESSION['loggedUserId']))
 		{
 			View::renderTemplate('Home/index.html');
 			exit();
 		}
-        View::renderTemplate('MainSite/mainSite.html');
+		else
+		{
+			View::renderTemplate('MainSite/mainSite.html');
+			exit();
+		}
     }
 	
 	public function loggoutAction()
