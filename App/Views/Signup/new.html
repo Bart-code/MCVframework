@@ -31,79 +31,75 @@
 {% endblock %}
 
 {% block body %}
-
-    <div class="container bg-container">
-		<form class="mainPanel col-sm-8 col-md-6 p-4 mt-4"
-			action="create" method="post" id="formSignup">
-			<div class="row ">
-				Name:
+	<form class="mainPanel col-sm-8 col-md-6 p-4 mt-4"
+		action="create" method="post" id="formSignup">
+		<div class="row ">
+			Name:
+		</div>
+		<div class="row" >
+			<input type="text" class="form-control" placeholder="User - name" aria-label="UserName" name="name" value="{{ user.name }}">
+		</div>
+		
+		{% if user.nameError is not empty %}
+			<p class="errorStyle">{{ user.nameError }}</p>
+		{% endif %}
+		
+		<div class="row rowMargin">
+			Last name:
+		</div>
+		<div class="row" >
+			<input type="text" class="form-control" placeholder="User - last name" aria-label="lastName" name="lastName" value="{{ user.lastName }}">
+		</div>
+		
+		{% if user.lastNameError is not empty %}
+			<p class="errorStyle">{{ user.lastNameError }}</p>
+		{% endif %}
+		
+		<div class="row rowMargin">
+			E-mail address:
+		</div>
+		<div class="row " >
+			<input type="text" class="form-control" placeholder="User - name" aria-label="UserEmail" name="email" value="{{ user.email }}">
+		</div>
+		
+		{% if user.emailError is not empty %}
+			<p class="errorStyle">{{ user.emailError }}</p>
+		{% endif %}
+		
+		<div class="row rowMargin">
+			Login:
+		</div>
+		<div class="row" >
+			<input type="text" class="form-control" placeholder="User - login" aria-label="UserLogin" name="login" value="{{ user.login }}">
+		</div>
+		
+		{% if user.loginError is not empty %}
+			<p class="errorStyle">{{ user.loginError }}</p>
+		{% endif %}
+		
+		<div class="row rowMargin">
+			Password
+		</div>
+		<div class="row" >
+			<input id="inputPassword" type="password" class="form-control" placeholder="User - password" aria-label="UserP" name="password1" />
+		</div>
+		<div class="row mt-2">
+			<input type="password" class="form-control" placeholder="Repeat user - password" aria-label="UserP" name="password2"/>
+		</div>
+		
+		{% if user.passwordError is not empty %}
+			<p class="errorStyle">{{ user.passwordError }}</p>
+		{% endif %}
+		
+		<div class="row mt-5">
+			<div class="col-sm ">
+				<input type="submit" class="btn buttonsStyle" value="Submit">
 			</div>
-			<div class="row" >
-				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName" name="name" value="{{ user.name }}">
+			<div class="col-sm ">
+				<a class="btn buttonsStyle" href="/Home/index" role="button">
+					<i class="icon-left-big"></i> Back
+				</a>
 			</div>
-			
-			{% if user.nameError is not empty %}
-				<p class="errorStyle">{{ user.nameError }}</p>
-			{% endif %}
-			
-			<div class="row rowMargin">
-				Last name:
-			</div>
-			<div class="row" >
-				<input type="text" class="form-control" placeholder="User - last name" aria-label="lastName" name="lastName" value="{{ user.lastName }}">
-			</div>
-			
-			{% if user.lastNameError is not empty %}
-				<p class="errorStyle">{{ user.lastNameError }}</p>
-			{% endif %}
-			
-			<div class="row rowMargin">
-				E-mail address:
-			</div>
-			<div class="row " >
-				<input type="text" class="form-control" placeholder="User - name" aria-label="UserEmail" name="email" value="{{ user.email }}">
-			</div>
-			
-			{% if user.emailError is not empty %}
-				<p class="errorStyle">{{ user.emailError }}</p>
-			{% endif %}
-			
-			<div class="row rowMargin">
-				Login:
-			</div>
-			<div class="row" >
-				<input type="text" class="form-control" placeholder="User - login" aria-label="UserLogin" name="login" value="{{ user.login }}">
-			</div>
-			
-			{% if user.loginError is not empty %}
-				<p class="errorStyle">{{ user.loginError }}</p>
-			{% endif %}
-			
-			<div class="row rowMargin">
-				Password
-			</div>
-			<div class="row" >
-				<input id="inputPassword" type="password" class="form-control" placeholder="User - password" aria-label="UserP" name="password1" />
-			</div>
-			<div class="row mt-2">
-				<input type="password" class="form-control" placeholder="Repeat user - password" aria-label="UserP" name="password2"/>
-			</div>
-			
-			{% if user.passwordError is not empty %}
-				<p class="errorStyle">{{ user.passwordError }}</p>
-			{% endif %}
-			
-			<div class="row mt-5">
-				<div class="col-sm ">
-					<input type="submit" class="btn buttonsStyle" value="Submit">
-				</div>
-				<div class="col-sm ">
-					<a class="btn buttonsStyle" href="/Home/index" role="button">
-						<i class="icon-left-big"></i> Back
-					</a>
-				</div>
-			</div>
-		</form>
-	</div>
-
+		</div>
+	</form>
 {% endblock %}

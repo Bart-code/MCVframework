@@ -32,17 +32,51 @@ table
 	 height: 300px;
 	 background-color:#30B2C7;
 }
+
+.menuPanel
+{
+	background-color:#00B2C7;
+	border-radius: 20px;
+	border: 2px solid #20A2B7;
+	box-shadow: 5px 5px 10px #225;
+	font-size: 12px !important;
+	font-family: 'Roboto Slab', serif;
+	padding: 15px;
+}
+
+.menuDiv
+{
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.menuButtons
+{
+	background-color:#1a98A2;
+	box-shadow: 3px 3px 5px #225;
+	border: none;
+	color: white;
+	font-size: 0.85rem;
+}
+
+.menuButtons:hover
+{
+	background-color: #2AA8B2;
+}
+
 .mainPanel
 {
 	background-color:#30B2C7;
 	margin-left: auto;
 	margin-right: auto;
-	border-radius: 40px;
+	border-radius: 20px;
 	border: 2px solid #20A2B7;
 	box-shadow: 5px 5px 10px #225;
-	font-size: 22px;
+	font-size: 18px;
 	font-family: 'Roboto Slab', serif;
-	padding: 50px !important;
+	padding: 20px;
 }
 
 .test1
@@ -62,7 +96,6 @@ table
 	box-shadow: 3px 3px 5px #225;
 	border: none;
 	color: white;
-	
 }
 
 .buttonsStyle:hover
@@ -118,6 +151,11 @@ table
 	{
 		margin-top: 5px;
 		margin-bottom: 5px;
+	}
+	
+	.menuPanel
+	{
+		padding: 20px;
 	}
 }
 

@@ -14,6 +14,7 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com"/>
 	<link rel="stylesheet" href="/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="/css/style.css" />
+	<link rel="stylesheet" href="/fontello/css/fontello.css" />
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet"/>
 	
 	{% block scripts %}
@@ -25,9 +26,49 @@
 		{% block header2 %}
 		{% endblock %}
 	</header>
-
-    {% block body %}
-    {% endblock %}
+	<div class="container bg-container">
+		<div class="row">
+			<div class="col-md-2 p-1" id="leftMenu">
+				<div class="menuPanel row gx-0">
+					<div class="menuDiv">
+						<a class="btn menuButtons w-100" href="/Incoming/new" role="button">
+							Add income <i class="icon-money"></i>
+						</a>
+					</div>
+					<div class="menuDiv">
+						<a class="btn menuButtons w-100 "  href="/Expensing/new" role="button">
+							Add expense <i class="icon-basket"></i>
+						</a>
+					</div>
+					<div class="menuDiv">
+						<a class="btn menuButtons w-100"  href="/Balancing/showTemplate" role="button">
+							Show balance <i class="icon-chart-pie"></i>
+						</a>
+					</div>
+					<div class="menuDiv">
+						<a class="btn menuButtons w-100" href="#" role="button">
+							Settings <i class="icon-params"></i>
+						</a>
+					</div>
+					<div class="menuDiv">
+						<a class="menuButtons btn w-100 mt-3" href="/signin/loggout" role="button">
+							Logout <i class="icon-logout"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class=" col-md-10 p-1 mx-auto" id="mainPanel">
+				<div class=" mainPanel row gx-0">
+					{% block body %}
+					{% endblock %}
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		
+	</script>
 	
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	
@@ -37,7 +78,9 @@
 	
 	<script src="/js/bootstrap.min.js"></script>
 	
-	{% block footer %}
+	{% block leftMenu %}
 	{% endblock %}
+	
+
 </body>
 </html>

@@ -95,152 +95,147 @@
 {% block header2 %}<h2 > Balance </h2>{% endblock %}
 
 {% block body %}
-	<div class="container bg-container">
-		<div class=" mainPanel col-md-12 col-lg-10 p-4 mt-4">
-			<form method="post" action="show">
-				<div class="row">
-						<div class="col-md-5 col-sm-10 mx-auto">			
-							<div class="row pb-1">
-								Time borders:
-							</div>
-							<div class="row pb-2">
-									<select class="textField"  name="timeSelector" id="timeBordersSelector" onchange="setTimeBorders()">
-										{% if selector is not empty %} 
-											{% set chosenOption = selector %} 
-											<option selected="{{chosenOption}}" hidden="hidden">{{chosenOption}}</option>
-										{% endif %} 
-										<option>Current month</option>
-										<option>Previous month</option>
-										<option>Current year</option>
-										<option>Custom </option>
-									</select>
-							</div>
-						</div>
-						<div class="col-md-5 col-sm-10 mx-auto">
-						</div>
-						<div class="row pb-1">
-							<div class="col-md-5 col-sm-10 mx-auto">
-								<div class="row pb-1">
-									Down border: 
-								</div>
-								<div class="row pb-2">
-									<input type="date" name="downBorder" class="textField timeBorders" id="downDateBorder" value='{{downBorder}}'/>
-								</div>
-							</div>
-							<div class="col-md-5 col-sm-10 mx-auto">
-								<div class="row pb-1">
-									Top border: 
-								</div>
-								<div class="row pb-2">
-									<input type="date" name="topBorder" class="textField timeBorders" id="topDateBorder" value='{{topBorder}}'  />
-								</div>
-								{% if topBorder is empty %} 
-									<script>setTimeBorders();</script>
-								{% endif %} 
-							</div>
-						</div>
-						<div class="row pb-1 mt-3 ">
-							<div class="w-50px">
-								<input type="submit" class= "btn buttonsStyle" value="Show balance" />
-							</div>
-						</div>
-				</div>
-			</form>
-			<div class="row mt-4" >
-				{% if selector is not empty %}
-					{% set i = 0 %}
-					{% set sumIncomes = 0 %}
-					{% for summaryAmounts in balance.incomesSummaryAmount%}
-						{% set sumIncomes = sumIncomes  + balance.incomesSummaryAmount[ i ]%}
-						{% set i = i + 1 %}
-					{% endfor %}
-					{% if sumIncomes > 0 %}
-						<div class="col-md-5 col-sm-10 mx-auto">
-							<div class="row">
-								Incomes:
-							</div>
-							<div class="row">
-								<table>
-									<thead>
-										<tr>
-											<th>Category</th>
-											<th>Sum amount zł</th>
-										</tr>
-									</thead>
-									{% set i = 0 %}
-									{% for summaryAmounts in balance.incomesSummaryAmount%}
-											<tr>
-												{% if balance.incomesSummaryAmount[ i ] is not empty %}
-													<td>{{balance.incomeCategoryNames[ i ]}}</td>
-													<td>{{balance.incomesSummaryAmount[ i ]}}</td>
-												{% endif %}
-											</tr>
-										{% set i = i + 1 %}
-									{% endfor %}
-								</table>
-								<div class="border-top mt-3">Totaly: {{sumIncomes}} zł</div>
-							</div>
-							<div id="piechartIncomes"></div>
-						</div>
-					{% else %}
-						<div class="col-md-5 col-sm-10 mx-auto"> No incomes  :( </div>
-					{% endif %}
-					
-					{% set i = 0 %}
-					{% set sumExpenses = 0 %}
-					{% for summaryAmounts in balance.expensesSummaryAmount%}
-								{% set sumExpenses = sumExpenses + balance.expensesSummaryAmount[ i ]%}
-						{% set i = i + 1 %}
-					{% endfor %}
-					{% if sumExpenses > 0 %}
-						<div class="col-md-5 col-sm-10 mx-auto">
-							<div class="row">
-								Expenses:
-							</div>
-							<div class="row">
-								<table>
-									<thead>
-										<tr>
-											<th>Category</th>
-											<th>Sum amount zł</th>
-										</tr>
-									</thead>
-									{% set i = 0 %}
-									{% for summaryAmounts in balance.expensesSummaryAmount%}
-											<tr>
-												{% if balance.expensesSummaryAmount[ i ] is not empty %}
-													<td>{{balance.expenseCategoryNames[ i ]}}</td>
-													<td>{{balance.expensesSummaryAmount[ i ]}}</td>
-												{% endif %}
-											</tr>
-										{% set i = i + 1 %}
-									{% endfor %}
-								</table>
-								<div class="border-top mt-3">Totaly: {{sumExpenses}} zł</div>
-							</div>
-							<div id="piechartExpenses"></div>
-						</div>
-					{% else %}
-						<div class="col-md-5 col-sm-10 mx-auto"> No expenses  :) </div>
-					{% endif %}
-					
-					<div class="col-md-10 mt-5">
-						{% set sumOfIncomesAndExpenses = sumIncomes - sumExpenses%}
-						Totaly balance:   {{sumIncomes}} zł - {{sumExpenses}} zł = {{sumOfIncomesAndExpenses}} zł
+	<form method="post" action="show">
+		<div class="row">
+				<div class="col-md-5 col-sm-10 mx-auto">			
+					<div class="row pb-1">
+						Time borders:
 					</div>
-				{% endif %}
-			</div>
-			<div class="row mt-5">
-				<div class="col-sm">
-					<a class="btn buttonsStyle" href="/signin/success" role="button">
-						<i class="icon-left-big"></i> Back
-					</a>
+					<div class="row pb-2">
+							<select class="textField"  name="timeSelector" id="timeBordersSelector" onchange="setTimeBorders()">
+								{% if selector is not empty %} 
+									{% set chosenOption = selector %} 
+									<option selected="{{chosenOption}}" hidden="hidden">{{chosenOption}}</option>
+								{% endif %} 
+								<option>Current month</option>
+								<option>Previous month</option>
+								<option>Current year</option>
+								<option>Custom </option>
+							</select>
+					</div>
 				</div>
-				<div class="col-sm ">
+				<div class="col-md-5 col-sm-10 mx-auto">
 				</div>
+				<div class="row pb-1">
+					<div class="col-md-5 col-sm-10 mx-auto">
+						<div class="row pb-1">
+							Down border: 
+						</div>
+						<div class="row pb-2">
+							<input type="date" name="downBorder" class="textField timeBorders" id="downDateBorder" value='{{downBorder}}'/>
+						</div>
+					</div>
+					<div class="col-md-5 col-sm-10 mx-auto">
+						<div class="row pb-1">
+							Top border: 
+						</div>
+						<div class="row pb-2">
+							<input type="date" name="topBorder" class="textField timeBorders" id="topDateBorder" value='{{topBorder}}'  />
+						</div>
+						{% if topBorder is empty %} 
+							<script>setTimeBorders();</script>
+						{% endif %} 
+					</div>
+				</div>
+				<div class="row pb-1 mt-3 ">
+					<div class="w-50px">
+						<input type="submit" class= "btn buttonsStyle" value="Show balance" />
+					</div>
+				</div>
+		</div>
+	</form>
+	<div class="row mt-4" >
+		{% if selector is not empty %}
+			{% set i = 0 %}
+			{% set sumIncomes = 0 %}
+			{% for summaryAmounts in balance.incomesSummaryAmount%}
+				{% set sumIncomes = sumIncomes  + balance.incomesSummaryAmount[ i ]%}
+				{% set i = i + 1 %}
+			{% endfor %}
+			{% if sumIncomes > 0 %}
+				<div class="col-md-5 col-sm-10 mx-auto">
+					<div class="row">
+						Incomes:
+					</div>
+					<div class="row">
+						<table>
+							<thead>
+								<tr>
+									<th>Category</th>
+									<th>Sum amount zł</th>
+								</tr>
+							</thead>
+							{% set i = 0 %}
+							{% for summaryAmounts in balance.incomesSummaryAmount%}
+									<tr>
+										{% if balance.incomesSummaryAmount[ i ] is not empty %}
+											<td>{{balance.incomeCategoryNames[ i ]}}</td>
+											<td>{{balance.incomesSummaryAmount[ i ]}}</td>
+										{% endif %}
+									</tr>
+								{% set i = i + 1 %}
+							{% endfor %}
+						</table>
+						<div class="border-top mt-3">Totaly: {{sumIncomes}} zł</div>
+					</div>
+					<div id="piechartIncomes"></div>
+				</div>
+			{% else %}
+				<div class="col-md-5 col-sm-10 mx-auto"> No incomes  :( </div>
+			{% endif %}
+			
+			{% set i = 0 %}
+			{% set sumExpenses = 0 %}
+			{% for summaryAmounts in balance.expensesSummaryAmount%}
+						{% set sumExpenses = sumExpenses + balance.expensesSummaryAmount[ i ]%}
+				{% set i = i + 1 %}
+			{% endfor %}
+			{% if sumExpenses > 0 %}
+				<div class="col-md-5 col-sm-10 mx-auto">
+					<div class="row">
+						Expenses:
+					</div>
+					<div class="row">
+						<table>
+							<thead>
+								<tr>
+									<th>Category</th>
+									<th>Sum amount zł</th>
+								</tr>
+							</thead>
+							{% set i = 0 %}
+							{% for summaryAmounts in balance.expensesSummaryAmount%}
+									<tr>
+										{% if balance.expensesSummaryAmount[ i ] is not empty %}
+											<td>{{balance.expenseCategoryNames[ i ]}}</td>
+											<td>{{balance.expensesSummaryAmount[ i ]}}</td>
+										{% endif %}
+									</tr>
+								{% set i = i + 1 %}
+							{% endfor %}
+						</table>
+						<div class="border-top mt-3">Totaly: {{sumExpenses}} zł</div>
+					</div>
+					<div id="piechartExpenses"></div>
+				</div>
+			{% else %}
+				<div class="col-md-5 col-sm-10 mx-auto"> No expenses  :) </div>
+			{% endif %}
+			
+			<div class="col-md-10 mt-5">
+				{% set sumOfIncomesAndExpenses = sumIncomes - sumExpenses%}
+				Totaly balance:   {{sumIncomes}} zł - {{sumExpenses}} zł = {{sumOfIncomesAndExpenses}} zł
 			</div>
+		{% endif %}
+	</div>
+	<div class="row mt-5">
+		<div class="col-sm">
+			<a class="btn buttonsStyle" href="/signin/success" role="button">
+				<i class="icon-left-big"></i> Back
+			</a>
+		</div>
+		<div class="col-sm ">
 		</div>
 	</div>
-    
 {% endblock %}
 
