@@ -40,7 +40,9 @@ class Signin extends \Core\Controller
 		}
 		else
 		{
-			View::renderTemplate('MainSite/mainSite.html');
+			$user = new User();
+			$userName=$user -> getNameById($_SESSION['loggedUserId']);
+			View::renderTemplate('MainSite/mainSite.html', ['userName' => $userName]);
 			exit();
 		}
     }

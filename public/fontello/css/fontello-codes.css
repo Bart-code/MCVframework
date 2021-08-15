@@ -16,5 +16,7 @@
 .icon-trash-1:before { content: '\e80e'; } /* '' */
 .icon-left-big:before { content: '\e80f'; } /* '' */
 .icon-login:before { content: '\e810'; } /* '' */
+.icon-clock:before { content: '\e811'; } /* '' */
+.icon-calendar:before { content: '\e812'; } /* '' */
 .icon-logout:before { content: '\f02d'; } /* '' */
 .icon-wpforms:before { content: '\f298'; } /* '' */
