@@ -89,5 +89,4 @@ class Balance extends \Core\Model
 			$this -> expenseCategoryNames[] = $expenseCategoryNames[ $i ];
 		}
 	}
-	
 }
