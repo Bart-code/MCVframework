@@ -44,6 +44,7 @@ class Balancing extends \Core\Controller
 		$balance->getSummaryExpenseAmount($expenseCategoriesId);
 		$balance->setIncomeCategories($incomeCategoriesName);
 		$balance->setExpenseCategories($expenseCategoriesName);
+		$balance->getAllIncomes();
 		
 		View::renderTemplate('Balancing/show.html', [ 'selector' => $selector, 'downBorder' => $downBorder, 'topBorder' =>  $topBorder, 'balance' => $balance]);
     }

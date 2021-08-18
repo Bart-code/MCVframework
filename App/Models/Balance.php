@@ -10,6 +10,7 @@ class Balance extends \Core\Model
 	protected $userId, $downTimeBorder, $topTimeBorder;
 	public $incomesSummaryAmount, $incomeCategoryNames;
 	public $expensesSummaryAmount, $expenseCategoryNames;
+	public $allIncomes, $allExpenses;
 
     public function __construct( $userId, $downTimeBorder, $topTimeBorder )
     {
@@ -89,4 +90,40 @@ class Balance extends \Core\Model
 			$this -> expenseCategoryNames[] = $expenseCategoryNames[ $i ];
 		}
 	}
+	
+	public function getAllIncomes()
+	{
+		$sql="SELECT incomes_category_assigned_to_users.name,
+		incomes.amount,
+		incomes.date_of_income, incomes.income_comment
+		FROM incomes, incomes_category_assigned_to_users
+		WHERE incomes.user_id=:userId
+		AND incomes_category_assigned_to_users.id=incomes.income_category_assigned_to_user_id
+		AND incomes.date_of_income BETWEEN :downBorder
+		AND :topBorder"; 
+		
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+		$stmt->bindValue(':userId', $this -> userId, PDO::PARAM_STR);
+		$stmt->bindValue(':downBorder', $this -> downTimeBorder, PDO::PARAM_STR); 
+		$stmt->bindValue(':topBorder', $this -> topTimeBorder , PDO::PARAM_STR);
+		
+		$stmt->execute();
+		if($stmt->rowCount())
+		{
+			$rowsCount=$stmt->rowCount();
+			for( $i=0 ; $i < $rowsCount ; $i++ )
+			{
+				$row =  $stmt->fetch(PDO::FETCH_ASSOC);
+				$this -> allIncomes[$i][0] = $row['name'];
+				$this -> allIncomes[$i][1] = $row['amount'];
+				$this -> allIncomes[$i][2] = $row['date_of_income'];
+				$this -> allIncomes[$i][3] = $row['income_comment'];
+			}
+		}
+		else $allIncomes = "No incomes";
+	}
+	
+	
+	
 }

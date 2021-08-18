@@ -1,13 +1,108 @@
 {% extends "base.html" %}
 
 {% block scripts %}
+<!-- time setting script -->
+	<script>
+		var maxDay;
+		var year;
+		
+		function setTimeBorders()
+		{
+			var selectorValue = document.getElementById("timeBordersSelector").value;
+			var now = new Date();
+			var downBorder='2000-01-01';
+			var topBorder='2000-01-01';
+			var month = (now.getMonth() + 1);
+			year= now.getFullYear();
+			
+			switch(selectorValue)
+			{
+				case "Current month":
+					setMaxDay( month );
+					if (month < 10) month = '0' + month;
+					downBorder= year+'-'+month+'-01';
+					topBorder= year+'-'+month+'-'+maxDay;
+					break;
+				case "Previous month":
+					if( month != 1) month--;
+					else
+					{
+						month=12;
+						year--;
+					}
+					setMaxDay( month );
+					if (month < 10) month = '0' + month;
+					downBorder= year+'-'+month+'-01';
+					topBorder= year+'-'+month+'-'+maxDay;
+					break;
+				case "Current year":
+					downBorder=year + '-01-01';
+					topBorder=year + '-12-31';
+					break;
+				case "Custom":
+					document.getElementById("topDateBorder").disabled = false;
+					document.getElementById("downDateBorder").disabled = false;
+					break;
+			}
+			document.getElementById("downDateBorder").value = downBorder;
+			document.getElementById("topDateBorder").value = topBorder;
+		}
+		
+		function setMaxDay( month )
+		{
+			if( month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+			{
+				maxDay = 31;
+			}
+			else if( month  == 2 )
+			{
+				if(year%4 ==0) maxDay = 29;
+				else maxDay = 28;
+			}
+			else maxDay = 30;
+		}
+	</script>	
+	
+	<!-- arrays settings for diagram -->
+	<script>
+		var incomeNamesArray  = [];
+		var expenseNamesArray  = [];
+		var incomeAmountsArray=[];
+		var expenseAmountsArray=[];
 
-	<script type="text/javascript"  src="/js/balance.js"></script>
+		let i=0;
+		{% for j in range(0, balance.incomeCategoryNames|length) %}
+			incomeNamesArray[ i ]= "{{ balance.incomeCategoryNames[  j ]}}";
+			incomeAmountsArray[ i ]= parseFloat( "{{ balance.incomesSummaryAmount[  j ] }}");
+			i++;
+		{% endfor %}
+		i=0;
+		
+		{% for j in range(0, balance.expenseCategoryNames|length) %}
+			expenseNamesArray[ i ]= "{{ balance.expenseCategoryNames[  j ]}}";
+			expenseAmountsArray[ i ]= parseFloat( "{{ balance.expensesSummaryAmount[  j ] }}");
+			i++;
+		{% endfor %}
+	</script> 
+	
+	<script>
+		//AJAX
+		$(document).ready(function() 
+		{
+			//var myTables = $( table ).not('.smallerTable');
+			//$(myTables tr).eq(1).hide();
+			$(".drugiRow").hide();
+		});
+		function toggleVisibleSublist()
+		{
+			$( event.currentTarget ).parent().parent().next().toggle();
+		}
+	</script>
+
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript"  src="/js/DiagramExpense.js"></script>
 	<script type="text/javascript"  src="/js/DiagramIncome.js"></script>
 	
-
 {% endblock %}
 	
 {% block header2 %}<h2 > Balance </h2>{% endblock %}
@@ -57,7 +152,7 @@
 				</div>
 				<div class="row pb-1 mt-3 ">
 					<div class="w-50px">
-						<input type="submit" class= "btn buttonsStyle" value="Show balance" />
+						<input type="submit" class= "btn buttonsStyle" value="Show balance"/>
 					</div>
 				</div>
 		</div>
@@ -72,7 +167,7 @@
 			{% endfor %}
 			{% if sumIncomes > 0 %}
 				<div class="col-md-5 col-sm-10 mx-auto">
-					<div class="row">
+					<div class="row border-bottom">
 						Incomes:
 					</div>
 					<div class="row">
@@ -85,13 +180,34 @@
 							</thead>
 							{% set i = 0 %}
 							{% for summaryAmounts in balance.incomesSummaryAmount%}
+									{% if balance.incomesSummaryAmount[ i ] is not empty %}
 									<tr>
-										{% if balance.incomesSummaryAmount[ i ] is not empty %}
-											<td>{{balance.incomeCategoryNames[ i ]}}</td>
-											<td>{{balance.incomesSummaryAmount[ i ]}}</td>
-											<td> <i class="icon-down-open" > </i> </td>
-										{% endif %}
+										<td>{{balance.incomeCategoryNames[ i ]}}</td>
+										<td>{{balance.incomesSummaryAmount[ i ]}} 
+											<button class="arrowButton" href="/signin/success" role="button" onclick="toggleVisibleSublist()">
+												<i class="icon-down-open"></i>
+											</button>
+										</td>
 									</tr>
+									<tr class="drugiRow">
+										<td colspan="2">
+											<table class="smallerTable" >
+												{% set rowCount = 3 %}
+												{% set j = 0 %}
+												{% for j in range( 0, rowCount ) %}
+													{% if  balance.allIncomes[ j ][ 0 ]  == balance.incomeCategoryNames[ i ]  %}
+														<tr>
+															<td> {{ balance.allIncomes[ j ][ 1 ] }} zł</td>
+															<td> {{ balance.allIncomes[ j ][ 2 ] }}</td>
+															<td> {{ balance.allIncomes[ j ][ 3 ] }}</td>
+														</tr>
+													{% endif %}
+													{% set j = j + 1 %}
+												{% endfor %}
+											</table>
+										</td>
+									</tr>
+								{% endif %}
 								{% set i = i + 1 %}
 							{% endfor %}
 						</table>
@@ -111,7 +227,7 @@
 			{% endfor %}
 			{% if sumExpenses > 0 %}
 				<div class="col-md-5 col-sm-10 mx-auto">
-					<div class="row">
+					<div class="row border-bottom">
 						Expenses:
 					</div>
 					<div class="row">

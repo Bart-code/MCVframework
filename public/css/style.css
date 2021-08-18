@@ -103,6 +103,19 @@ table
 	background-color: #2AA8B2;
 }
 
+.arrowButton
+{
+	background-color:#30B2C7;
+	border: none;
+	color: white;
+	font-size: 10px;
+}
+
+.arrowButton:hover
+{
+	background-color: #2AA8B2;
+}
+
 .error
 {
 	color: red; 
@@ -144,6 +157,19 @@ table
 	color: white;
 	border-radius: 30px !important;
 }
+
+.smallerTable
+{
+	font-size: 13px;
+	width: 80%;
+	margin-left: 2rem;
+}
+
+.smallerTable tr
+{
+	text-align: center;
+}
+
 
 @media(max-width: 575px)
 {
