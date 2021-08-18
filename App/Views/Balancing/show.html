@@ -89,9 +89,7 @@
 		//AJAX
 		$(document).ready(function() 
 		{
-			//var myTables = $( table ).not('.smallerTable');
-			//$(myTables tr).eq(1).hide();
-			$(".drugiRow").hide();
+			$(".subRow").hide();
 		});
 		function toggleVisibleSublist()
 		{
@@ -184,15 +182,15 @@
 									<tr>
 										<td>{{balance.incomeCategoryNames[ i ]}}</td>
 										<td>{{balance.incomesSummaryAmount[ i ]}} 
-											<button class="arrowButton" href="/signin/success" role="button" onclick="toggleVisibleSublist()">
+											<button class="arrowButton" role="button" onclick="toggleVisibleSublist()">
 												<i class="icon-down-open"></i>
 											</button>
 										</td>
 									</tr>
-									<tr class="drugiRow">
+									<tr class="subRow">
 										<td colspan="2">
 											<table class="smallerTable" >
-												{% set rowCount = 3 %}
+												{% set rowCount = balance.allIncomes|length %}
 												{% set j = 0 %}
 												{% for j in range( 0, rowCount ) %}
 													{% if  balance.allIncomes[ j ][ 0 ]  == balance.incomeCategoryNames[ i ]  %}
@@ -240,12 +238,35 @@
 							</thead>
 							{% set i = 0 %}
 							{% for summaryAmounts in balance.expensesSummaryAmount%}
+									{% if balance.expensesSummaryAmount[ i ] is not empty %}
 									<tr>
-										{% if balance.expensesSummaryAmount[ i ] is not empty %}
 											<td>{{balance.expenseCategoryNames[ i ]}}</td>
-											<td>{{balance.expensesSummaryAmount[ i ]}}</td>
-										{% endif %}
+											<td>{{balance.expensesSummaryAmount[ i ]}}
+												<button class="arrowButton" role="button" onclick="toggleVisibleSublist()">
+													<i class="icon-down-open"></i>
+												</button>
+											</td>
 									</tr>
+									<tr class="subRow">
+										<td colspan="2">
+											<table class="smallerTable" >
+												{% set rowCount = balance.allExpenses|length %}
+												{% set j = 0 %}
+												{% for j in range( 0, rowCount ) %}
+													{% if  balance.allExpenses[ j ][ 0 ]  == balance.expenseCategoryNames[ i ]  %}
+														<tr>
+															<td> {{ balance.allExpenses[ j ][ 1 ] }} zł</td>
+															<td> {{ balance.allExpenses[ j ][ 2 ] }}</td>
+															<td> {{ balance.allExpenses[ j ][ 3 ] }}</td>
+															<td> {{ balance.allExpenses[ j ][ 4 ] }}</td>
+														</tr>
+													{% endif %}
+													{% set j = j + 1 %}
+												{% endfor %}
+											</table>
+										</td>
+									</tr>
+									{% endif %}
 								{% set i = i + 1 %}
 							{% endfor %}
 						</table>

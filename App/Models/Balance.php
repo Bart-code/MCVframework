@@ -124,6 +124,39 @@ class Balance extends \Core\Model
 		else $allIncomes = "No incomes";
 	}
 	
-	
-	
+	public function getAllExpenses()
+	{
+		$sql="SELECT expenses_category_assigned_to_users.name,
+		expenses.amount,
+		payment_methods_assigned_to_users.name,
+		expenses.date_of_expense, expenses.expense_comment
+		FROM expenses, expenses_category_assigned_to_users, payment_methods_assigned_to_users
+		WHERE expenses.user_id=:userId
+		AND payment_methods_assigned_to_users.id=expenses.payment_method_assigned_to_user_id
+		AND expenses_category_assigned_to_users.id=expenses.expense_category_assigned_to_user_id
+		AND expenses.date_of_expense BETWEEN :downBorder
+		AND :topBorder"; 
+		
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+		$stmt->bindValue(':userId', $this -> userId, PDO::PARAM_STR);
+		$stmt->bindValue(':downBorder', $this -> downTimeBorder, PDO::PARAM_STR); 
+		$stmt->bindValue(':topBorder', $this -> topTimeBorder , PDO::PARAM_STR);
+		
+		$stmt->execute();
+		if($stmt->rowCount())
+		{
+			$rowsCount=$stmt->rowCount();
+			for( $i=0 ; $i < $rowsCount ; $i++ )
+			{
+				$row =  $stmt->fetch(PDO::FETCH_BOTH);
+				$this -> allExpenses[$i][0] = $row[0];
+				$this -> allExpenses[$i][1] = $row['amount'];
+				$this -> allExpenses[$i][2] = $row[2];
+				$this -> allExpenses[$i][3] = $row['date_of_expense'];
+				$this -> allExpenses[$i][4] = $row['expense_comment'];
+			}
+		}
+		else $allExpenses = "No incomes";
+	}
 }
