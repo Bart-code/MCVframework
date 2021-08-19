@@ -19,5 +19,7 @@
 .icon-clock:before { content: '\e811'; } /* '' */
 .icon-calendar:before { content: '\e812'; } /* '' */
 .icon-down-open:before { content: '\e813'; } /* '' */
+.icon-user:before { content: '\e814'; } /* '' */
+.icon-credit-card:before { content: '\e815'; } /* '' */
 .icon-logout:before { content: '\f02d'; } /* '' */
 .icon-wpforms:before { content: '\f298'; } /* '' */

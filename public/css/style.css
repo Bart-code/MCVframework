@@ -170,6 +170,10 @@ table
 	text-align: center;
 }
 
+.settingsButton
+{
+	font-size: 14px;
+}
 
 @media(max-width: 575px)
 {

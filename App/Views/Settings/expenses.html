@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+
+
+{% endblock %}
+	
+{% block header2 %}<h2 > Settings </h2>{% endblock %}
+
+{% block body %}
+	<div class="row settingsButton">
+		<div class="col-md-3 ">
+			<a class="btn buttonsStyle settingsButton w-100" href="/settings/account" role="button">
+				Account <i class="icon-user"></i> 
+			</a>
+		</div>
+		<div class="col-md-3">
+			<a class="btn buttonsStyle settingsButton w-100" href="/settings/incomes" role="button">
+				Incomes categories <i class="icon-money"></i>
+			</a>
+		</div>
+		<div class="col-md-3">
+			<a class="btn buttonsStyle settingsButton w-100" href="/settings/expenses" role="button">
+				Expenses categories <i class="icon-basket"></i>
+			</a>
+		</div>
+		<div class="col-md-3">
+			<a class="btn buttonsStyle settingsButton w-100" href="/settings/paymenths" role="button">
+				Paymenths methods <i class="icon-credit-card"></i>
+			</a>
+		</div>
+	</div>
+	<div class="row">
+		expenses settings
+	</div>
+{% endblock %}
+

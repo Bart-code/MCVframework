@@ -137,6 +137,18 @@
       "css": "down-open",
       "code": 59411,
       "src": "fontawesome"
+    },
+    {
+      "uid": "8b80d36d4ef43889db10bc1f0dc9a862",
+      "css": "user",
+      "code": 59412,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "3d8cc269fdad8a4cda55a20542a84e5c",
+      "css": "credit-card",
+      "code": 59413,
+      "src": "fontawesome"
     }
   ]
 }
