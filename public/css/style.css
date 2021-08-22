@@ -173,7 +173,23 @@ table
 .settingsButton
 {
 	font-size: 14px;
+	background-color:#30B2C7;
+	border: none;
+	color: white;
+	border-radius: 0;
 }
+
+.settingsButtonSelected
+{
+	border-bottom: 2px solid white;
+}
+
+.settingsButton:hover
+{
+	background-color: #36B8CB;
+	color: white;
+}
+
 
 @media(max-width: 575px)
 {
