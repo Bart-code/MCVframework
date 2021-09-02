@@ -18,16 +18,34 @@ class Settings extends \Core\Controller
 			exit();
 		}
     }
-
-	public function showAction()
-    {
-		View::renderTemplate('Settings/main.html');
-    }
 	
 	public function accountAction()
     {
-		View::renderTemplate('Settings/account.html');
+		$user = new User();
+		$user = $user -> findByID($_SESSION['loggedUserId']);
+		
+		View::renderTemplate('Settings/account.html',[
+                'user' => $user
+            ]);
     }
+	
+	public function accountSettingsSaveAction()
+	{
+		$user = new User($_POST);
+		
+		if ( $user->update() )
+		{
+			View::renderTemplate('Settings/account.html', [
+                'user' => $user
+            ]);
+        }
+		else
+		{
+            View::renderTemplate('Settings/account.html', [
+                'user' => $user
+            ]);
+        }
+	}
 	
 	public function incomesAction()
     {

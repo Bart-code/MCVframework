@@ -30,8 +30,64 @@
 			</a>
 		</div>
 	</div>
+	
 	<div class="row">
-		account settings
+		<form action="accountSettingsSave" method="post" class="m-3 mt-4">
+			<div class="row ">
+				Name:
+			</div>
+			<div class="row" >
+				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName" name="name" value="{{ user.name }}">
+			</div>
+			
+			{% if user.nameError is not empty %}
+				<p class="errorStyle">{{ user.nameError }}</p>
+			{% endif %}
+			
+			<div class="row rowMargin">
+				Last name:
+			</div>
+			<div class="row" >
+				<input type="text" class="form-control" placeholder="User - last name" aria-label="lastName" name="lastName" value="{{ user.lastName }}">
+			</div>
+			
+			{% if user.lastNameError is not empty %}
+				<p class="errorStyle">{{ user.lastNameError }}</p>
+			{% endif %}
+			
+			<div class="row rowMargin">
+				E-mail address:
+			</div>
+			<div class="row " >
+				<input type="text" class="form-control" placeholder="User - name" aria-label="UserEmail" name="email" value="{{ user.email }}">
+			</div>
+			
+			{% if user.emailError is not empty %}
+				<p class="errorStyle">{{ user.emailError }}</p>
+			{% endif %}
+			
+			<div class="row rowMargin">
+				Login:
+			</div>
+			<div class="row" >
+				<input type="text" class="form-control" placeholder="User - login" aria-label="UserLogin" name="login" value="{{ user.login }}">
+			</div>
+			
+			{% if user.loginError is not empty %}
+				<p class="errorStyle">{{ user.loginError }}</p>
+			{% endif %}
+			
+			<div class="row mt-5">
+				<div class="col-sm ">
+					<input type="submit" class="btn buttonsStyle" value="Save changes">
+				</div>
+				<div class="col-sm ">
+					<a class="btn buttonsStyle" href="/Home/index" role="button">
+						<i class="icon-left-big"></i> Back
+					</a>
+				</div>
+			</div>
+		</form>
 	</div>
 {% endblock %}
 

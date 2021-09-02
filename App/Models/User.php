@@ -45,8 +45,49 @@ class User extends \Core\Model
         }
         return false;
     }
+	
+	public function update()
+	{
+		$this->updateValidate();
+
+        if(empty($this->nameError) and empty($this->lastNameError) and empty($this->emailError)
+			and empty($this->loginError) )
+		{
+					
+			$sql = ' UPDATE users 
+			SET name=:name, lastName=:lastName , email=:email, login=:login
+			WHERE id=:id ';
+
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue( ':name', $this->name, PDO::PARAM_STR);
+            $stmt->bindValue( ':lastName', $this->lastName, PDO::PARAM_STR);
+            $stmt->bindValue( ':email', $this->email, PDO::PARAM_STR);
+            $stmt->bindValue( ':login', $this->login, PDO::PARAM_STR);
+			$stmt->bindValue( ':id', $_SESSION['loggedUserId'], PDO::PARAM_STR);
+
+            return $stmt->execute();
+        }
+        return false;
+	}
 
     public function validate()
+    {
+		// last name
+        if ($this->lastName == '')
+		{
+            $this->lastNameError = 'Last name is required';
+        }
+		
+		// Name
+        if ($this->name == '')
+		{
+            $this->nameError =  'Name is required';
+        }
+	}
+		
+	public function updateValidate()
     {
 		// last name
         if ($this->lastName == '')
@@ -64,9 +105,6 @@ class User extends \Core\Model
         if (filter_var($this->email, FILTER_VALIDATE_EMAIL) === false) {
             $this->emailError = 'Invalid email';
         }
-        elseif (static::emailExists( $this->email)) {
-            $this->emailError = 'Email already exist';
-        }
 		
 		// login
         if ($this->login == '') {
@@ -76,34 +114,6 @@ class User extends \Core\Model
 		{
             $this->loginError = 'Please enter at least 6 characters for the login';
 		}
-		elseif( static::loginExists( $this->login) )
-		{
-			$this->loginError = 'Login already exist';
-		}
-
-        // Password 
-        if (isset($this->password1))
-		{
-            if (strlen($this->password1) < 6)
-			{
-                $this->passwordError = 'Please enter at least 6 characters for the password';
-            }
-
-            if (preg_match('/.*[a-z]+.*/i', $this->password1) == 0)
-			{
-                $this->passwordError = 'Password needs at least one letter';
-            }
-
-            if (preg_match('/.*\d+.*/i', $this->password1) == 0)
-			{
-                $this->passwordError = 'Password needs at least one number';
-            }
-			
-			if($this->password1 != $this->password2)
-			{
-				$this->passwordError = 'Passwords must be same !';
-			}
-        }
     }
 
 	public static function emailExists($email)
