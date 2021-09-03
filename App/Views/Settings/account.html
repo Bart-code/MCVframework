@@ -1,7 +1,20 @@
 {% extends "base.html" %}
 
 {% block scripts %}
-
+	<script>
+		$( document ).ready(function() {
+		
+			$('#changePasswordForm').hide();
+			$("#changePasswordBtn").click(function(){
+				$('#changePasswordForm').toggle();
+			});
+			
+			$(".form-control").on('change paste input', function(){
+			  $("#saveButton").prop('disabled', false);
+			});
+			
+		});
+	</script>
 
 {% endblock %}
 	
@@ -30,14 +43,14 @@
 			</a>
 		</div>
 	</div>
-	
+
 	<div class="row">
 		<form action="accountSettingsSave" method="post" class="m-3 mt-4">
 			<div class="row ">
 				Name:
 			</div>
 			<div class="row" >
-				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName" name="name" value="{{ user.name }}">
+				<input type="text" class="form-control" placeholder="User - name" aria-label="UserName" name="name" value="{{ user.name }}" >
 			</div>
 			
 			{% if user.nameError is not empty %}
@@ -77,9 +90,50 @@
 				<p class="errorStyle">{{ user.loginError }}</p>
 			{% endif %}
 			
+			<div class="col-3">
+				<div class="row mt-4">
+					<button id="changePasswordBtn" type="button" class="btn buttonsStyle"> <i class="icon-key"></i> 	Change password
+					</button>
+				</div>
+			</div>
+			<div id="changePasswordForm" class="row">
+				<div class="row rowMargin">
+					New password:
+				</div>
+				<div class="row mt-1" >
+					<input type="text" class="form-control" aria-label="NewPassword" name="newPassword" placeholder="New password">
+				</div>
+				<div class="row mt-1" >
+					<input type="text" class="form-control" aria-label="NewPassword" name="newPassword2" placeholder="Repeat new password">
+				</div>
+				<div class="row rowMargin mt-1">
+					Verification code:
+				</div>
+				<div class="row mt-1" >
+					<input type="text" class="form-control" aria-label="NewPassword" name="newPassword" placeholder="Verification code from email">
+				</div>
+				<div class="row mt-1" >
+					<div class="col-3">
+						<button id="verifCodeButton" type="button" class="btn buttonsStyle mt-1 w-100" >
+							Get verification code
+						</button>
+						<button type="button" class="btn buttonsStyle mt-1 w-100" >
+							Confirm new password
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-3">
+				<div class="row mt-4">
+					<button type="button" class="btn buttonsStyle" data-toggle="modal" data-target="#deleteAccountModal">
+						<i class="icon-user-times"></i> Delete account
+					</button>
+				</div>
+			</div>
+			
 			<div class="row mt-5">
 				<div class="col-sm ">
-					<input type="submit" class="btn buttonsStyle" value="Save changes">
+					<input id ="saveButton" disabled type="button" class="btn buttonsStyle" value="Save changes" data-toggle="modal" data-target="#saveChangesModal">
 				</div>
 				<div class="col-sm ">
 					<a class="btn buttonsStyle" href="/Home/index" role="button">
@@ -87,7 +141,50 @@
 					</a>
 				</div>
 			</div>
+			
+			<!-- Modal for save changes -->
+			<div class="modal fade" id="saveChangesModal" tabindex="-1" role="dialog" aria-labelledby="saveChangesModalTitle" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content mainPanel">
+				  <div class="modal-body  mb-4">
+					Are you sure to save changes?
+				  </div>
+				  <div class="row">
+					<div class="col">
+						<button type="button" class="btn buttonsStyle" data-dismiss="modal">Close</button>
+					</div>
+					<div class="col">
+						<button type="submit" class="btn buttonsStyle">Save changes</button>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			</div>
 		</form>
+		
+		<!-- Modal for delete account -->
+			<div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModalTitle" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content mainPanel">
+				  <div class="modal-body  mb-4">
+					Are you sure you want delete your account and logout?
+					You'll lose all of your incomes and expenses.
+				  </div>
+				  <form action="deleteUser" >
+					<div class="row">
+						<div class="col">
+							<button type="button" class="btn buttonsStyle" data-dismiss="modal">Close</button>
+						</div>
+						<div class="col">
+							<button type="submit" class="btn buttonsStyle">Delete account</button>
+						</div>
+					</div>
+				  </form>
+				</div>
+			  </div>
+			</div>
+			
 	</div>
+	
 {% endblock %}
 

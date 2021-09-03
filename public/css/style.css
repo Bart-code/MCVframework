@@ -122,6 +122,12 @@ table
 	font-size: 14px;
 }
 
+
+.buttonsStyle:disabled
+{
+	background-color: #5c6677;
+}
+
 .text-leftttt
 {
 	text-align: left;

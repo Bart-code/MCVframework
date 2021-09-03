@@ -75,17 +75,62 @@ class User extends \Core\Model
     public function validate()
     {
 		// last name
-        if ($this->lastName == '')
+		if ($this->lastName == '')
 		{
-            $this->lastNameError = 'Last name is required';
-        }
+			$this->lastNameError = 'Last name is required';
+		}
 		
 		// Name
-        if ($this->name == '')
+		if ($this->name == '')
 		{
-            $this->nameError =  'Name is required';
-        }
-	}
+			$this->nameError =  'Name is required';
+		}
+
+		// email address
+		if (filter_var($this->email, FILTER_VALIDATE_EMAIL) === false) {
+			$this->emailError = 'Invalid email';
+		}
+		elseif (static::emailExists( $this->email)) {
+			$this->emailError = 'Email already exist';
+		}
+		
+		// login
+		if ($this->login == '') {
+			$this->loginError = 'Login is required';
+		}
+		elseif (strlen($this->login) < 6)
+		{
+			$this->loginError = 'Please enter at least 6 characters for the login';
+		}
+		elseif( static::loginExists( $this->login) )
+		{
+			$this->loginError = 'Login already exist';
+		}
+
+		// Password 
+		if (isset($this->password1))
+		{
+			if (strlen($this->password1) < 6)
+			{
+				$this->passwordError = 'Please enter at least 6 characters for the password';
+			}
+
+			if (preg_match('/.*[a-z]+.*/i', $this->password1) == 0)
+			{
+				$this->passwordError = 'Password needs at least one letter';
+			}
+
+			if (preg_match('/.*\d+.*/i', $this->password1) == 0)
+			{
+				$this->passwordError = 'Password needs at least one number';
+			}
+			
+			if($this->password1 != $this->password2)
+			{
+				$this->passwordError = 'Passwords must be same !';
+			}
+		}
+    }
 		
 	public function updateValidate()
     {
@@ -219,18 +264,33 @@ class User extends \Core\Model
 	
 	public static function getNameByID($id)
     {
-       $sql = "SELECT * FROM users WHERE id = :id";
+        $sql = "SELECT * FROM users WHERE id = :id";
 
-        $db = static::getDB();
-        $stmt = $db->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_STR);
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+		$stmt->bindValue(':id', $id, PDO::PARAM_STR);
 		
-        if( $stmt->execute() )
+		if( $stmt->execute() )
 		{
 			$user = $stmt->fetch(PDO::FETCH_ASSOC);
 			return  $user['name'];
 		}
 		else return 0;
     }
+	
+	public function delteUser( $id )
+	{
+		$sql = "DELETE FROM users WHERE id = :id;
+				DELETE FROM incomes WHERE user_id = :id;
+				DELETE FROM expenses WHERE user_id = :id;
+				DELETE FROM incomes_category_assigned_to_users WHERE user_id = :id;
+				DELETE FROM expenses_category_assigned_to_users WHERE user_id = :id;
+				DELETE FROM payment_methods_assigned_to_users WHERE user_id = :id;";
+
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+		$stmt->bindValue(':id', $id, PDO::PARAM_STR);
+		$stmt->execute();
+	}
 
 }

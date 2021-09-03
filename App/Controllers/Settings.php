@@ -6,6 +6,7 @@ use \Core\View;
 use \App\Models\IncomeCategories;
 use \App\Models\ExpenseCategories;
 use \App\Models\User;
+use \App\Controllers\Signin;
 
 class Settings extends \Core\Controller
 {
@@ -60,6 +61,14 @@ class Settings extends \Core\Controller
 	public function paymenthsAction()
     {
 		View::renderTemplate('Settings/paymenths.html');
+    }
+	
+	public function deleteUserAction()
+    {
+		$user = new User();
+		$user = $user -> findByID($_SESSION['loggedUserId']);
+		$user-> delteUser( $_SESSION['loggedUserId'] );
+		$this->redirect('/signin/loggout');
     }
 	
 }
