@@ -196,6 +196,17 @@ table
 	color: white;
 }
 
+.greenCommunicate
+{
+	font-size: 14px;
+	color: green;
+}
+
+.redCommunicate
+{
+	color: red;
+	font-size: 14px;
+}
 
 @media(max-width: 575px)
 {

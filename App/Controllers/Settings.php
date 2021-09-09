@@ -67,8 +67,16 @@ class Settings extends \Core\Controller
     {
 		$user = new User();
 		$user = $user -> findByID($_SESSION['loggedUserId']);
-		$user-> delteUser( $_SESSION['loggedUserId'] );
-		$this->redirect('/signin/loggout');
+		$user -> delteUser( $_SESSION['loggedUserId'] );
+		$this ->redirect('/signin/loggout');
     }
 	
+	public function changePasswordAction()
+	{
+		var_dump($_POST);
+		$user = new User();
+		$user = $user -> findByID($_SESSION['loggedUserId']);
+		$password_hash = password_hash($_POST['newPassword1'], PASSWORD_DEFAULT);
+		$user -> updatePassword( $_SESSION['loggedUserId'] , $password_hash );
+	}
 }

@@ -2,18 +2,117 @@
 
 {% block scripts %}
 	<script>
+	
+	
 		$( document ).ready(function() {
 		
 			$('#changePasswordForm').hide();
+			$('#mailCodeCommunicate').hide();
+			$('#confirmCommunicate').hide();
+			$('#changePasswordModal').modal({ show: false});
+			
+			var code=null;
+			
+			function setNewPassword()
+			{
+				const form = new FormData(document.getElementById('changePassForm'));
+				fetch('changePassword', {
+					method: 'POST',
+					body: form
+				});
+			}
+			
 			$("#changePasswordBtn").click(function(){
 				$('#changePasswordForm').toggle();
 			});
 			
-			$(".form-control").on('change paste input', function(){
+			$("#accountForm input").on('change paste input', function(){
 			  $("#saveButton").prop('disabled', false);
 			});
 			
+			$('#changePassForm').validate({
+				rules:
+					{
+					newPassword1:
+					{
+						required: true,
+						minlength: 6,
+					},
+					newPassword2:
+					{
+						required: true,
+						equalTo: '#password1'
+					}		
+				},
+			});
+			
+			$("#getVerifCodeButton").click(function(){
+				code = Math.floor((Math.random() * 10000) + 1);
+				var templateParams = {
+					to_address: "{{user.email}}",
+					to_name: "{{user.name}}",
+					message: code
+				};
+				emailjs.send('service_1zt5mka', 'template_0amgvk4', templateParams);
+				$("#mailCodeCommunicate").show();
+				$("#getVerifCodeButton").prop('disabled', true);
+			});
+			
+			$("#confirmButton").click(function(){
+				if(  code != null )
+				{
+					if( $('#changePassForm').valid() )
+					{
+						if( $("#verifCode").val() == code )
+						{
+							setNewPassword();
+							$('#confirmCommunicate').hide();
+							code = null;
+							$('#changePasswordModal').modal('show');
+							
+						}
+						else
+						{
+							$('#confirmCommunicate').text("Wrong verify code");
+						}
+					}
+					else
+					{
+						$('#confirmCommunicate').text("Enter correct new password");
+					}
+				}
+				else
+				{
+					$("#confirmCommunicate").show();
+				}
+			});
+			
+			$("#confirmChangePassBtn").click(function(){
+				code=null;
+				$('#mailCodeCommunicate').hide();
+				$('#confirmCommunicate').hide();
+				$('#changePassCommunicate').text("Change password successful !");
+				$("#confirmChangePassBtn").hide();
+			});
+			
+			$('#changePasswordModal').on('hidden.bs.modal', function(e)
+			{
+				$('#changePassCommunicate').text("Are you sure you want change password ?");
+				code=null;
+				$('#mailCodeCommunicate').hide();
+				$('#confirmCommunicate').hide();
+				$('#changePasswordForm').hide();
+				$("#confirmChangePassBtn").show();
+				$("#password1").val(null);
+				$("#password2").val(null);
+				$("#verifCode").val(null);
+			})
+			
+			$("#closeChangePassBtn").click(function(){
+				$('#changePasswordModal').modal('hide');
+			});
 		});
+		
 	</script>
 
 {% endblock %}
@@ -45,7 +144,7 @@
 	</div>
 
 	<div class="row">
-		<form action="accountSettingsSave" method="post" class="m-3 mt-4">
+		<form action="accountSettingsSave" method="post" class="m-3 mt-4" id="accountForm">
 			<div class="row ">
 				Name:
 			</div>
@@ -90,46 +189,6 @@
 				<p class="errorStyle">{{ user.loginError }}</p>
 			{% endif %}
 			
-			<div class="col-3">
-				<div class="row mt-4">
-					<button id="changePasswordBtn" type="button" class="btn buttonsStyle"> <i class="icon-key"></i> 	Change password
-					</button>
-				</div>
-			</div>
-			<div id="changePasswordForm" class="row">
-				<div class="row rowMargin">
-					New password:
-				</div>
-				<div class="row mt-1" >
-					<input type="text" class="form-control" aria-label="NewPassword" name="newPassword" placeholder="New password">
-				</div>
-				<div class="row mt-1" >
-					<input type="text" class="form-control" aria-label="NewPassword" name="newPassword2" placeholder="Repeat new password">
-				</div>
-				<div class="row rowMargin mt-1">
-					Verification code:
-				</div>
-				<div class="row mt-1" >
-					<input type="text" class="form-control" aria-label="NewPassword" name="newPassword" placeholder="Verification code from email">
-				</div>
-				<div class="row mt-1" >
-					<div class="col-3">
-						<button id="verifCodeButton" type="button" class="btn buttonsStyle mt-1 w-100" >
-							Get verification code
-						</button>
-						<button type="button" class="btn buttonsStyle mt-1 w-100" >
-							Confirm new password
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col-3">
-				<div class="row mt-4">
-					<button type="button" class="btn buttonsStyle" data-toggle="modal" data-target="#deleteAccountModal">
-						<i class="icon-user-times"></i> Delete account
-					</button>
-				</div>
-			</div>
 			
 			<div class="row mt-5">
 				<div class="col-sm ">
@@ -162,6 +221,64 @@
 			</div>
 		</form>
 		
+		<!-- Change password -->
+		<form id="changePassForm" class="m-3 mt-4">	
+			<div class="row">
+				<div class="col-3 mt-4 p-0">
+					<button id="changePasswordBtn" type="button" class="btn buttonsStyle w-100"> <i class="icon-key"></i> 	Change password
+					</button>
+				</div>
+			</div>
+			
+			<div id="changePasswordForm" class="row ">
+				<div class="col-8  m-2">
+					<div class="row rowMargin">
+						New password:
+					</div>
+					<div class="row mt-1" >
+						<input type="password" class="form-control" aria-label="NewPassword" name="newPassword1" placeholder="New password" id="password1">
+					</div>
+					<div class="row mt-1" >
+						<input type="password" class="form-control" aria-label="NewPassword" name="newPassword2" placeholder="Repeat new password" id="password2">
+					</div>
+					<div class="row rowMargin mt-1">
+						Verification code:
+					</div>
+					<div class="row mt-1" >
+						<input type="text" class="form-control" aria-label="NewPassword" name="verificationCode" placeholder="Verification code from email" id="verifCode">
+					</div>
+					<div class="row mt-2" >
+						<div class="col-4 p-0">
+							<button id="getVerifCodeButton" type="button" class="btn buttonsStyle mt-1 w-100">
+								Get verification code
+							</button>
+							<span id="mailCodeCommunicate" class="greenCommunicate">
+								Check your e-mail !
+							</span>
+						</div>
+					</div>
+					<div class="row mt-1" >
+						<div class="col-4 p-0">
+							<button type="button" class="btn buttonsStyle mt-1 w-100" id="confirmButton">
+								Confirm new password
+							</button>
+							<span id="confirmCommunicate" class="redCommunicate mt-1">
+								Get verification code first !
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-3 mt-4 p-0">
+					<button type="button" class="btn buttonsStyle w-100" data-toggle="modal" data-target="#deleteAccountModal">
+						<i class="icon-user-times"></i> Delete account
+					</button>
+				</div>
+			</div>
+		</form>
+		
 		<!-- Modal for delete account -->
 			<div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModalTitle" aria-hidden="true">
 			  <div class="modal-dialog modal-dialog-centered" role="document">
@@ -177,6 +294,27 @@
 						</div>
 						<div class="col">
 							<button type="submit" class="btn buttonsStyle">Delete account</button>
+						</div>
+					</div>
+				  </form>
+				</div>
+			  </div>
+			</div>
+			
+		<!-- Modal for confirm change password -->
+			<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModalTitle" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content mainPanel">
+				  <div class="modal-body mb-4" id="changePassCommunicate">
+					Are you sure you want change password ?
+				  </div>
+				  <form action="deleteUser" >
+					<div class="row">
+						<div class="col">
+							<button type="button" id="closeChangePassBtn" class="btn buttonsStyle" data-dismiss="modal">Close</button>
+						</div>
+						<div class="col">
+							<button type="button" id="confirmChangePassBtn" class="btn buttonsStyle">Change password</button>
 						</div>
 					</div>
 				  </form>

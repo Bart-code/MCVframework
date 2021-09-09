@@ -293,4 +293,14 @@ class User extends \Core\Model
 		$stmt->execute();
 	}
 
+	public function updatePassword( $id , $newPasswordHashed )
+	{
+		$sql = "UPDATE `users` SET `password_hash`=:newPassword WHERE id = :id;";
+
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+		$stmt->bindValue(':id', $id, PDO::PARAM_STR);
+		$stmt->bindValue(':newPassword', $newPasswordHashed, PDO::PARAM_STR);
+		$stmt->execute();
+	}
 }
