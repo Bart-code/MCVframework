@@ -208,6 +208,12 @@ table
 	font-size: 14px;
 }
 
+#chosenForDelete
+{
+	font-size: 30px;
+	border-bottom: 1px solid white;
+}
+
 @media(max-width: 575px)
 {
 	.buttonsStyle

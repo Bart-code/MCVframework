@@ -6,6 +6,8 @@ use \Core\View;
 use \App\Models\IncomeCategories;
 use \App\Models\ExpenseCategories;
 use \App\Models\User;
+use \App\Models\Income;
+use \App\Models\Expense;
 use \App\Controllers\Signin;
 
 class Settings extends \Core\Controller
@@ -50,7 +52,8 @@ class Settings extends \Core\Controller
 	
 	public function incomesAction()
     {
-		View::renderTemplate('Settings/incomes.html');
+		$categories=static::loadCategories("incomes");
+		View::renderTemplate('Settings/incomes.html', ['categories' => $categories]);
     }
 	
 	public function expensesAction()
@@ -73,10 +76,61 @@ class Settings extends \Core\Controller
 	
 	public function changePasswordAction()
 	{
-		var_dump($_POST);
 		$user = new User();
 		$user = $user -> findByID($_SESSION['loggedUserId']);
 		$password_hash = password_hash($_POST['newPassword1'], PASSWORD_DEFAULT);
 		$user -> updatePassword( $_SESSION['loggedUserId'] , $password_hash );
+	}
+	
+	public static function loadCategories( $categoriesSpecify )
+	{
+		$userId=$_SESSION['loggedUserId'];
+		if( $categoriesSpecify == "incomes")
+		{
+			$incomeCategories = new IncomeCategories($userId);
+			$categories=$incomeCategories-> getCategoriesNameByUserId($userId) ;
+		}
+		else if( $categoriesSpecify == "expenses" )
+		{
+			$expenseCategories = new ExpenseCategories($userId);
+			$categories=$expenseCategories-> getCategoriesNameByUserId($userId) ;
+		}
+		else if( $categoriesSpecify == "payments" )
+		{
+			$paymentsMethods = new PaymentsMethods($userId);
+			$categories=$paymentsMethods-> getMethodsById($userId) ;
+		}
+		else
+		{
+			$categories="Something gone wrong";
+		}
+		return $categories;
+	}
+	
+	public function updateIncomeCategoryNameAction()
+	{
+		$userId=$_SESSION['loggedUserId'];
+		$incomeCategories = new IncomeCategories($userId);
+		$incomeCategories -> updateCategoryName($_POST['selectedCategoryName'] , $_POST['newCategoryName'] );
+	}
+	
+	public function deleteCategoryAction()
+	{
+		$userId=$_SESSION['loggedUserId'];
+		$incomeCategories = new IncomeCategories($userId);
+		$idDeletedCategory = $incomeCategories -> getCategoryId( $_POST['selectedCategoryName'] );
+		$anotherName = 'Another';
+		$idAnotherCategory = $incomeCategories -> getCategoryId($anotherName);
+		
+		$income= new Income;
+		$income -> changeIncomeCategoryToAnother( $idDeletedCategory , $idAnotherCategory);
+		$incomeCategories -> deleteCategory( $_POST['selectedCategoryName'] );
+	}
+	
+	public function newCategoryAction()
+	{
+		$userId=$_SESSION['loggedUserId'];
+		$incomeCategories = new IncomeCategories($userId);
+		$incomeCategories -> createNewCategory( $_POST['newCategory'] );
 	}
 }

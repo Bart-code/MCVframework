@@ -57,4 +57,18 @@ class Income extends \Core\Model
 		}
 		return true;
     }
+	
+	public function changeIncomeCategoryToAnother( $idDeletedCategory, $idAnotherCategory)
+	{
+		$sql = 'UPDATE incomes 
+			SET income_category_assigned_to_user_id=:id_another_category
+			WHERE income_category_assigned_to_user_id=:id_deleted_category';
+
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+
+		$stmt->bindValue( ':id_another_category', $idAnotherCategory, PDO::PARAM_STR);
+		$stmt->bindValue( ':id_deleted_category', $idDeletedCategory, PDO::PARAM_STR);
+		$stmt->execute();
+	}
 }

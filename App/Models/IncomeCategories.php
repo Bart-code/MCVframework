@@ -27,7 +27,7 @@ class IncomeCategories extends \Core\Model
 	
 	public function getCategoriesNameByUserId($userId)
 	{
-		$sql = "SELECT * FROM incomes_category_assigned_to_users WHERE user_id = :userId";
+		$sql = "SELECT * FROM incomes_category_assigned_to_users WHERE user_id = :userId ORDER BY id DESC; ";
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
@@ -49,7 +49,7 @@ class IncomeCategories extends \Core\Model
 	
 	public function getCategoriesIdByUserId($userId)
 	{
-		$sql = "SELECT * FROM incomes_category_assigned_to_users WHERE user_id = :userId";
+		$sql = "SELECT * FROM incomes_category_assigned_to_users WHERE user_id = :userId ORDER BY id DESC;";
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
@@ -81,7 +81,46 @@ class IncomeCategories extends \Core\Model
 
 		$stmt->execute();
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		 return  $result['id'];
+		return  $result['id'];
+	}
+	
+	public function updateCategoryName( $oldName, $newName)
+	{
+		$sql = 'UPDATE incomes_category_assigned_to_users 
+			SET name=:newName
+			WHERE user_id=:userId AND name=:oldName;';
+
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+
+		$stmt->bindValue( ':newName', $newName, PDO::PARAM_STR);
+		$stmt->bindValue( ':oldName', $oldName, PDO::PARAM_STR);
+		$stmt->bindValue( ':userId', $this -> userId, PDO::PARAM_STR);
+		$stmt->execute();
+	}
+	
+	public function deleteCategory( $name )
+	{
+		$sql = 'DELETE FROM incomes_category_assigned_to_users
+			WHERE user_id=:userId AND name=:name;';
+
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+
+		$stmt->bindValue( ':name', $name, PDO::PARAM_STR);
+		$stmt->bindValue( ':userId', $this -> userId, PDO::PARAM_STR);
+		$stmt->execute();
+	}
+	
+	public function createNewCategory( $name)
+	{
+		$sql = 'INSERT INTO incomes_category_assigned_to_users VALUES ( NULL , :userId , :name );';
+
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+		$stmt->bindValue( ':userId', $this -> userId, PDO::PARAM_STR);
+		$stmt->bindValue( ':name', $name, PDO::PARAM_STR);
+		$stmt->execute();
 	}
 
 }
