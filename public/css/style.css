@@ -296,12 +296,26 @@ select:disabled
 	width: flex;
 }
 
+.headerBtn
+{
+	text-decoration: none;
+	cursor: pointer;
+	color: white;
+}
+
+.headerBtn:hover
+{
+	color: white;
+}
+
+
 @media(max-width: 575px)
 {
 	.buttonsStyle
 	{
 		margin-top: 5px;
 		margin-bottom: 5px;
+		font-size: 12px;
 	}
 	
 	.menuPanel

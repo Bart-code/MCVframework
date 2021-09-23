@@ -40,8 +40,11 @@
 					topBorder=year + '-12-31';
 					break;
 				case "Custom":
-					document.getElementById("topDateBorder").disabled = false;
-					document.getElementById("downDateBorder").disabled = false;
+					var day = now.getDate();
+					if (day < 10) day = "0" + day;
+					if (month < 10) month = '0' + month;
+					downBorder= year+'-'+month+'-'+day;
+					topBorder= year+'-'+month+'-'+day;
 					break;
 			}
 			document.getElementById("downDateBorder").value = downBorder;
