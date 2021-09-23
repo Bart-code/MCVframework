@@ -2,6 +2,7 @@
 
 {% block scripts %}
 	<script>
+	
 		function setTimeToField() {
 			var now = new Date();
 			var month = (now.getMonth() + 1);               
@@ -14,6 +15,95 @@
 			document.getElementById("dateField").value = today;
 		}
 		window.onload = setTimeToField;
+		$( document ).ready(function()
+		{	
+			$("#submitBtn").prop('disabled', true);
+			
+			$("#limitRow").hide();
+			
+			var itemSelected = false;
+			
+			$("input[type=radio]").click( function( event )
+			{
+				itemSelected = true;
+				setLimitLabel();
+				$("#submitBtn").prop('disabled', false);
+				if( $("input[type=radio]:checked").parent().parent().next().attr('class') == 'categoryLimit')
+				{
+					$("#limitRow").show();
+				}
+				else
+				{
+					$("#limitRow").hide();
+				}
+			});
+			
+			function setLimitLabel()
+			{
+				var selectedDate = new Date( $('#dateField').val() );
+				var year = selectedDate.getFullYear();
+				var month = selectedDate.getMonth() + 1;
+				setMaxDay( month );
+				if (month < 10) month = '0' + month;
+				var downBorder= year+'-'+month+'-01';
+				var topBorder= year+'-'+month+'-'+maxDay;
+				
+				const form1 = new FormData(document.getElementById('expenseForm'));
+				form1.append('downBorder', downBorder);
+				form1.append('topBorder', topBorder);
+				var summaryAmounts ='nic';
+				
+				var response;
+				fetch('getSummaryExpenseForOneCategory', {
+					method: 'POST',
+					body: form1
+				})
+				.then(response => response.json())
+				.then(data =>
+				{
+					$("#limitSpace").text(data.id);
+					$("#currentAmount").text( $("#amountOfExpense").val() );
+					var summaryExpenses = 10;
+					summaryExpenses = parseFloat( $("#amountOfExpense").val() ) + parseFloat( data.id );
+					$("#summaryExpenses").text( summaryExpenses );
+					if( $("input[type=radio]:checked").parent().parent().next().attr('class') == 'categoryLimit')
+					{
+						var itemLimit = parseFloat( $("input[type=radio]:checked").parent().parent().next().find( "p" ).html() );
+						if( summaryExpenses > itemLimit)
+						{
+							$("#limitRow").addClass("overLimit");
+							$("#limitRow div:last-child").show();
+						}
+						else
+						{
+							$("#limitRow").removeClass("overLimit");
+							$("#limitRow div:last-child").hide();
+						}
+					}
+				});
+			}
+			
+			function setMaxDay( month )
+			{
+				if( month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
+				{
+					maxDay = 31;
+				}
+				else if( month  == 2 )
+				{
+					if(year%4 ==0) maxDay = 29;
+					else maxDay = 28;
+				}
+				else maxDay = 30;
+			}
+			
+			$("#amountOfExpense").change( function()
+			{ 
+				if( itemSelected ) { setLimitLabel(); }
+			});
+			$("#dateField").change( function(){ setLimitLabel() });
+
+		});
 	</script>	
 
 {% endblock %}
@@ -21,24 +111,34 @@
 {% block header2 %}<h2 > Add expense </h2>{% endblock %}
 
 {% block body %}
-	<form method="post" action="add">
+	<form id="expenseForm" method="post" action="add">
 		<div class="row">	
 			<div class="col-md-5 col-sm-10 mx-auto">
 				<div class="row pb-1">
 					Amount:
 				</div>
 				<div class="row pb-2">
-					<input type="number" step="0.01" class="textField" name="amount" value="0.00" min="0" aria-label="Expense">
+					<input type="number" step="0.01" class="textField" id="amountOfExpense" name="amount" value="0.00" min="0" aria-label="Expense">
 				</div>
 				{% if expense.amountError is not empty %}
 					<p class="errorStyle">{{expense.amountError}}</p>
 				{% endif %}
+				<div id="limitRow" class="pb-1 underLimit">
+					<div>
+						Spent: <p id="limitSpace" class="limitRowp"></p> zł + Entered amount: <p class="limitRowp" id="currentAmount"></p> zł  =  
+						<p class="limitRowp" id="summaryExpenses" ></p> zł
+					</div>
+					<div class="mt-1">
+						Monthly limit overflow !
+					</div>
+				</div>
+				
 				
 				<div class="row pb-1">
 					Date:
 				</div>
 				<div class="row pb-2">
-					<input type="date" class="textField" name="date"  id="dateField" aria-label="Date">
+					<input type="date" class="textField" name="date" id="dateField" aria-label="Date">
 				</div>
 				<div class="row pb-1">
 					Payment type:
@@ -54,11 +154,17 @@
 					Item:
 				</div>
 				<div class="row pb-2">
-					<select id="Item" class="textField" name="item" >
-						{% for name in categories %}
-							<option>{{name}}</option>
+					<div class="selectField">
+						{% set categoriesCount = categories|length%}
+						{% for i in range(0, categoriesCount-1) %}
+							<div>
+								<div class="selectRow"><label><input type="radio" class="m-1" name="item" value="{{categories[i]}}">{{categories[i]}}</label></div>
+								{% if limits[i] != "0.00" %}
+									<div class="categoryLimit"> Limit: <p style="display:inline;">{{limits[i]}}</p> zł</div>
+								{% endif %}
+							</div>
 						{% endfor %}
-					</select>
+					</div>
 				</div>
 			</div>
 			<div class="col-md-5 col-sm-10 mx-auto">
@@ -72,7 +178,7 @@
 		</div>
 		<div class="row mt-5">
 			<div class="col-sm ">
-				<input class="btn buttonsStyle" type="submit" value="Submit"/>
+				<input class="btn buttonsStyle" id="submitBtn" type="submit" value="Submit"/>
 			</div>
 			<div class="col-sm">
 				<a class="btn buttonsStyle" href="/signin/success" role="button">

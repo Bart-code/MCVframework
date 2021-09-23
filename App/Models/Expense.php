@@ -64,5 +64,18 @@ class Expense extends \Core\Model
 		}
 		return true;
     }
+	
+	public function changeExpenseCategoryToAnother( $idDeletedCategory, $idAnotherCategory)
+	{
+		$sql = 'UPDATE expenses 
+			SET expense_category_assigned_to_user_id=:id_another_category
+			WHERE expense_category_assigned_to_user_id=:id_deleted_category';
 
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+
+		$stmt->bindValue( ':id_another_category', $idAnotherCategory, PDO::PARAM_STR);
+		$stmt->bindValue( ':id_deleted_category', $idDeletedCategory, PDO::PARAM_STR);
+		$stmt->execute();
+	}
 }

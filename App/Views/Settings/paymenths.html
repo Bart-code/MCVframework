@@ -31,7 +31,98 @@
 		</div>
 	</div>
 	<div class="row">
-		payments settings
+		<form id="paymentMethodsEditForm" >
+			<div class="row m-3">
+				<span class="m-2"> Select method to edit </span>
+				<div class="row pb-2 mt-1">
+					<select id="selectedCategory" class="textField h-100 p-2" name="selectedCategoryName" size="{{methods|length}}">
+						{% for name in methods %}
+							<option>{{name}}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="row mt-3">
+					<div class="col-4">
+						<button type="button" class="btn buttonsStyle w-100" id="editNameBtn" data-toggle="modal" data-target="#editNameModal">Edit name</button>
+					</div>
+					<div class="col-4">
+						<button type="button" class="btn buttonsStyle w-100" id="deleteBtn" data-toggle="modal" data-target="#deleteMethodModal">Delete payment method</button>
+					</div>
+					<div class="col-4">
+						<button type="button" class="btn buttonsStyle w-100" id="newBtn" data-toggle="modal" data-target="#newMethodModal">New payment method</button>
+					</div>
+				</div>
+			</div>
+		
+			<!-- Modal for edit name -->
+			<div class="modal fade" id="editNameModal" tabindex="-1" role="dialog" aria-labelledby="saveChangesModalTitle" aria-hidden="true">
+			  <div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content mainPanel">
+				  <div class="modal-body  mb-4">
+					<input type="text" class="form-control" id="editNameField" aria-label="newCategory" name="newCategoryName">
+				  </div>
+				  <div class="row">
+					<div class="col">
+						<button type="button" class="btn buttonsStyle" data-dismiss="modal">Close</button>
+					</div>
+					<div class="col">
+						<button type="button" name="editSubmitBtn" class="btn buttonsStyle" id="confirmNewNameBtn">Save new name</button>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			</div>
+		</form>
+	</div>
+	
+	<!-- Modal for delete category -->
+	<div class="modal fade" id="deleteMethodModal" tabindex="-1" role="dialog" aria-labelledby="deleteCategoryModalTitle" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content mainPanel">
+			<div class="row" >
+				<p id='chosenForDelete' class="text-center chosenCategory"></p>
+			</div>
+			<div class="row">
+				<p class="text-justify"> Are you sure you want dalete this category ?
+				All expenses with this category will be assign to Another category. </p>
+			</div>
+			<div class="row">
+			<div class="col">
+				<button type="button" class="btn buttonsStyle" data-dismiss="modal">Close</button>
+			</div>
+			<div class="col">
+				<button type="submit" class="btn buttonsStyle" data-dismiss="modal" id="confirmDeleteCategoryBtn">Delete category</button>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	
+	<!-- Modal for new method -->
+	<div class="modal fade" id="newMethodModal" tabindex="-1" role="dialog" aria-labelledby="newCategoryModalTitle" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content mainPanel">
+			<form id="newCategoryForm">
+				<div class="row" >
+					<p class="text-center font-italic"> Enter name of new category </p>
+				</div>
+				<div class="modal-body  mb-4">
+					<input type="text" class="form-control" id="newNameField" aria-label="newCategory" name="newCategory">
+				</div>
+				<div class="row" >
+					<p class="text-center error" id="errorField" ></p>
+				</div>
+				<div class="row">
+					<div class="col">
+						<button type="button" class="btn buttonsStyle" data-dismiss="modal">Close</button>
+					</div>
+					<div class="col">
+						<button type="button" name="newSubmitBtn" class="btn buttonsStyle" id="confirmNewCategoryBtn">Confirm category</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	  </div>
 	</div>
 {% endblock %}
 

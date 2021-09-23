@@ -6,6 +6,7 @@ use \Core\View;
 use \App\Models\Expense;
 use \App\Models\ExpenseCategories;
 use \App\Models\PaymentMethods;
+use \App\Models\Balance;
 
 class Expensing extends \Core\Controller
 {
@@ -23,7 +24,8 @@ class Expensing extends \Core\Controller
     {
 		$categories=static::loadCategories();
 		$methods=static::loadPaymentMethods();
-		View::renderTemplate('Expensing/new.html', ['paymentMethods' => $methods, 'categories' => $categories]);
+		$limits=static::loadCategoryLimits();
+		View::renderTemplate('Expensing/new.html', ['paymentMethods' => $methods, 'categories' => $categories, 'limits' => $limits]);
     }
 	
 	public function addAction()
@@ -48,7 +50,8 @@ class Expensing extends \Core\Controller
 		{
 			$categories=static::loadCategories();
 			$paymentMethods=static::loadPaymentMethods();
-			View::renderTemplate('Expensing/new.html', ['paymentMethods' =>$paymentMethods,'categories' => $categories, 'expense' => $expense]);
+			$limits=static::loadCategoryLimits();
+			View::renderTemplate('Expensing/new.html', ['paymentMethods' =>$paymentMethods,'categories' => $categories, 'limits' => $limits, 'expense' => $expense]);
 		}
     }
 	
@@ -68,9 +71,31 @@ class Expensing extends \Core\Controller
 		return $categories;
 	}
 	
+	public static function loadCategoryLimits()
+	{
+		$userId=$_SESSION['loggedUserId'];
+		$expenseCategories = new ExpenseCategories($userId);
+		$limits=$expenseCategories-> loadLimits($userId) ;
+		return $limits;
+	}
+	
 	public function successAction()
     {
         View::renderTemplate('MainSite/mainSite.html');
     }
+	
+	public function getSummaryExpenseForOneCategoryAction()
+	{
+		$userId=$_SESSION['loggedUserId'];
+		$downBorder = $_POST['downBorder'];
+		$topBorder = $_POST['topBorder'];
+		$balance=new Balance($userId, $downBorder, $topBorder);
+		
+		$expenseCategories = new ExpenseCategories($userId);
+		$categoryId = $expenseCategories -> getCategoryId($_POST['item']);
+		$result = $balance -> getSummaryExpensesAmountsForOneCategory( $categoryId );
+		$test=array('id' => $result);
+		echo json_encode( $test );
+	}
 
 }

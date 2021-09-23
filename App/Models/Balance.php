@@ -159,4 +159,30 @@ class Balance extends \Core\Model
 		}
 		else $allExpenses = "No incomes";
 	}
+	
+	public function getSummaryExpensesAmountsForOneCategory($expenseCategoriesId)
+	{
+			$sql="SELECT SUM(expenses.amount)
+			AS summaryAmount
+			FROM expenses
+			WHERE expenses.user_id=:userId
+			AND expenses.expense_category_assigned_to_user_id =:expensesCategoryId
+			AND expenses.date_of_expense BETWEEN :downBorder
+			AND :topBorder"; 
+			
+			$db = static::getDB();
+			$stmt = $db->prepare($sql);
+			$stmt->bindValue(':userId', $this -> userId, PDO::PARAM_STR);
+			$stmt->bindValue(':expensesCategoryId', $expenseCategoriesId , PDO::PARAM_STR);
+			$stmt->bindValue(':downBorder', $this -> downTimeBorder, PDO::PARAM_STR); 
+			$stmt->bindValue(':topBorder', $this -> topTimeBorder , PDO::PARAM_STR);
+
+			$stmt->execute();
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			if( $row['summaryAmount'] == null )
+			{
+				$row['summaryAmount'] = 0;
+			}
+			return $row['summaryAmount'];
+	}
 }

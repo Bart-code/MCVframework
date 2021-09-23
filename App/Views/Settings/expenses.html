@@ -2,6 +2,124 @@
 
 {% block scripts %}
 
+<script>
+	$( document ).ready(function()
+	{
+		if( $("#selectedCategory").val() == 'Another' )
+		{
+			$("#editNameBtn").prop('disabled', true);
+			$("#deleteBtn").prop('disabled', true);
+		}
+			
+		$('select option').first().attr('selected', 'selected');
+		
+		$("#editNameBtn").click( function()
+		{
+			$('#editNameField').val( $('#selectedCategory').val() );
+		});
+		
+		$("#confirmNewNameBtn").click( function()
+		{
+			const form = new FormData(document.getElementById('expenseCategoryEditForm'));
+			fetch('updateExpenseCategoryName', {
+				method: 'POST',
+				body: form
+			}).then(function(){location.reload();});
+		});
+		
+		$("#selectedCategory").click( function()
+		{
+			if( $("#selectedCategory").val() == 'Another' )
+			{
+				$("#editNameBtn").prop('disabled', true);
+				$("#deleteBtn").prop('disabled', true);
+			}
+			else
+			{
+				$("#editNameBtn").prop('disabled', false);
+				$("#deleteBtn").prop('disabled', false);
+			}
+		});
+		
+		$("#deleteBtn").click( function()
+		{
+			$("#chosenForDelete").text( $("#selectedCategory").val() );
+		});
+		
+		
+		$("#confirmDeleteCategoryBtn").click( function()
+		{
+			const form1 = new FormData(document.getElementById('expenseCategoryEditForm'));
+			fetch('deleteExpenseCategory', {
+				method: 'POST',
+				body: form1
+			}).then(function(){location.reload();});
+		});
+		
+		$("#confirmNewCategoryBtn").click( function()
+		{
+			let newCategoryUppercase = $('#newNameField').val();
+			newCategoryUppercase = newCategoryUppercase.replace(/\s/g, "")
+			newCategoryUppercase = newCategoryUppercase.toUpperCase();
+			let toCompare = '';
+			
+			const categoriesArray = JSON.parse('{{ categories|json_encode|raw }}');
+			var isGood = true;
+			
+			for(var i=0 ; i < categoriesArray.length ; i++)
+			{
+				toCompare = categoriesArray[i];
+				toCompare = toCompare.toUpperCase();
+				if( toCompare == newCategoryUppercase)
+				{
+					isGood = false;
+				}
+			}
+			if( newCategoryUppercase == '')
+			{
+				$('#errorField').text('Wrong category name!');
+			}
+			else
+			{
+				if( isGood )
+				{
+					const form = new FormData(document.getElementById('newCategoryForm'));
+					fetch('newExpenseCategory', {
+						method: 'POST',
+						body: form
+					}).then(function(){location.reload();});
+				}
+				else
+				{
+					$('#errorField').text('Category already exist !');
+				}
+			}
+			
+		});
+		
+		$('#newCategoryModal').on('hidden.bs.modal', function(e)
+		{
+			$('#errorField').text('');
+			$('#newNameField').val('');
+		});
+
+		$("#addLimitBtn").click( function()
+		{
+			$("#selectedCategoryField").text( $("#selectedCategory").val() );
+		});
+		
+		$("#confirmAddLimitBtn").click( function()
+		{
+			const form = new FormData(document.getElementById('addLimitForm'));
+			form.append('categoryName', $("#selectedCategory").val() );
+			fetch('addCategoryLimit', {
+				method: 'POST',
+				body: form
+			}).then(function(){location.reload();});
+		});
+		
+	});
+</script>
 
 {% endblock %}
 	
@@ -30,8 +148,141 @@
 			</a>
 		</div>
 	</div>
-	<div class="row">
-		expenses settings
+	<form id="expenseCategoryEditForm" >
+		<div class="row m-3">
+			<span class="m-2"> Select category to edit </span>
+			<div class="row pb-2 mt-1">
+				<select id="selectedCategory" class="textField h-100 col" name="selectedCategoryName" size="{{categories|length}}">
+					{% for name in categories %}
+						<option>{{name}}</option>
+					{% endfor %}
+				</select>
+				<select id="limitsSelect" disabled class="textField h-100 col-2" size="{{categories|length}}">
+					{% for limit in limitArray %}
+						{% if limit == 0.00 %}
+							<option style="color: white">|</option>
+						{% else %}
+							<option>Limit: {{limit}} zł</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+			</div>
+			<div class="row mt-3">
+				<div class="col-3">
+					<button type="button" class="btn buttonsStyle w-100" id="editNameBtn" data-toggle="modal" data-target="#editNameModal">Edit name</button>
+				</div>
+				<div class="col-3">
+					<button type="button" class="btn buttonsStyle w-100" id="deleteBtn" data-toggle="modal" data-target="#deleteCategoryModal">Delete category</button>
+				</div>
+				<div class="col-3">
+					<button type="button" class="btn buttonsStyle w-100" id="newBtn" data-toggle="modal" data-target="#newCategoryModal">New category</button>
+				</div>
+				<div class="col-3">
+					<button type="button" class="btn buttonsStyle w-100" id="addLimitBtn" data-toggle="modal" data-target="#addLimitModal">Add limit</button>
+				</div>
+			</div>
+		</div>
+	
+		<!-- Modal for edit name -->
+		<div class="modal fade" id="editNameModal" tabindex="-1" role="dialog" aria-labelledby="saveChangesModalTitle" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content mainPanel">
+			  <div class="modal-body  mb-4">
+				<input type="text" class="form-control" id="editNameField" aria-label="newCategory" name="newCategoryName">
+			  </div>
+			  <div class="row">
+				<div class="col">
+					<button type="button" class="btn buttonsStyle" data-dismiss="modal">Close</button>
+				</div>
+				<div class="col">
+					<button type="button" name="editSubmitBtn" class="btn buttonsStyle" id="confirmNewNameBtn">Save new name</button>
+				</div>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	</form>	
+	
+	<!-- Modal for delete category -->
+	<div class="modal fade" id="deleteCategoryModal" tabindex="-1" role="dialog" aria-labelledby="deleteCategoryModalTitle" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content mainPanel">
+			<div class="row" >
+				<p id='chosenForDelete' class="text-center chosenCategory"></p>
+			</div>
+			<div class="row">
+				<p class="text-justify"> Are you sure you want dalete this category ?
+				All expenses with this category will be assign to Another category. </p>
+			</div>
+			<div class="row">
+			<div class="col">
+				<button type="button" class="btn buttonsStyle" data-dismiss="modal">Close</button>
+			</div>
+			<div class="col">
+				<button type="submit" class="btn buttonsStyle" data-dismiss="modal" id="confirmDeleteCategoryBtn">Delete category</button>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	
+	<!-- Modal for new category -->
+	<div class="modal fade" id="newCategoryModal" tabindex="-1" role="dialog" aria-labelledby="newCategoryModalTitle" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content mainPanel">
+			<form id="newCategoryForm">
+				<div class="row" >
+					<p class="text-center font-italic"> Enter name of new category </p>
+				</div>
+				<div class="modal-body  mb-4">
+					<input type="text" class="form-control" id="newNameField" aria-label="newCategory" name="newCategory">
+				</div>
+				<div class="row" >
+					<p class="text-center error" id="errorField" ></p>
+				</div>
+				<div class="row">
+					<div class="col">
+						<button type="button" class="btn buttonsStyle" data-dismiss="modal">Close</button>
+					</div>
+					<div class="col">
+						<button type="button" name="newSubmitBtn" class="btn buttonsStyle" id="confirmNewCategoryBtn">Confirm category</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	  </div>
+	</div>
+	
+	<!-- Modal for add limit -->
+	<div class="modal fade" id="addLimitModal" tabindex="-1" role="dialog" aria-labelledby="addLimitModalTitle" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content mainPanel">
+			<form id="addLimitForm">
+				<div class="row" >
+					<p class="text-center "> Enter limit for this category </p>
+				</div>
+				<div class="modal-body  mb-4">
+					<div class="row" >
+						<p id='selectedCategoryField' name="selectedCategoryForLimit" class="text-center chosenCategory"></p>
+					</div>
+				</div>
+				<div class="modal-body  mb-4">
+					<input type="number" step="0.01" class="form-control" id="addLimitField" aria-label="newCategory" name="categoryLimit">
+				</div>
+				<div class="row" >
+					<p class="text-center error" id="errorField" ></p>
+				</div>
+				<div class="row">
+					<div class="col">
+						<button type="button" class="btn buttonsStyle" data-dismiss="modal">Close</button>
+					</div>
+					<div class="col">
+						<button type="button" class="btn buttonsStyle" id="confirmAddLimitBtn">Add limit </button>
+					</div>
+				</div>
+			</form>
+		</div>
+	  </div>
 	</div>
 {% endblock %}
 

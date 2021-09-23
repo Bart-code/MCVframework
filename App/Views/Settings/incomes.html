@@ -50,7 +50,7 @@
 			$("#confirmDeleteCategoryBtn").click( function()
 			{
 				const form1 = new FormData(document.getElementById('incomeCategoryEditForm'));
-				fetch('deleteCategory', {
+				fetch('deleteIncomeCategory', {
 					method: 'POST',
 					body: form1
 				}).then(function(){location.reload();});
@@ -84,7 +84,7 @@
 					if( isGood )
 					{
 						const form = new FormData(document.getElementById('newCategoryForm'));
-						fetch('newCategory', {
+						fetch('newIncomeCategory', {
 							method: 'POST',
 							body: form
 						}).then(function(){location.reload();});
@@ -153,6 +153,7 @@
 				</div>
 			</div>
 		</div>
+	
 		
 		<!-- Modal for edit name -->
 		<div class="modal fade" id="editNameModal" tabindex="-1" role="dialog" aria-labelledby="saveChangesModalTitle" aria-hidden="true">
@@ -172,20 +173,18 @@
 			</div>
 		  </div>
 		</div>
-	
 	</form>	
-	
 	
 	<!-- Modal for delete category -->
 	<div class="modal fade" id="deleteCategoryModal" tabindex="-1" role="dialog" aria-labelledby="deleteCategoryModalTitle" aria-hidden="true">
 	  <div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content mainPanel">
 			<div class="row" >
-				<p id='chosenForDelete' class="text-center font-italic"></p>
+				<p id='chosenForDelete' class="text-center chosenCategory"></p>
 			</div>
 			<div class="row">
 				<p class="text-justify"> Are you sure you want dalete this category ?
-				All incomes and expenses with this category will be assign to Another category. </p>
+				All incomes with this category will be assign to Another category. </p>
 			</div>
 			<div class="row">
 			<div class="col">

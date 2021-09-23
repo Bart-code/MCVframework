@@ -21,9 +21,20 @@ h2
 	margin: 5px;
 }
 
+.smallText
+{
+	font-size: 8px !important;
+	font-style: italic;
+	margin: 2px;
+}
+
 table
 {
 	font-size: 18px;
+}
+
+select::-webkit-scrollbar {
+  display: none;
 }
 
 #piechart
@@ -101,6 +112,16 @@ table
 .buttonsStyle:hover
 {
 	background-color: #2AA8B2;
+}
+
+.categoryLimit
+{
+	display: inline-block;
+	color: gray;
+	font-size: 13px;
+	text-align: right;
+	float: right;
+	padding: 4px;
 }
 
 .arrowButton
@@ -196,6 +217,20 @@ table
 	color: white;
 }
 
+.selectField
+{
+	background-color:white;
+	border: 1px solid black;
+	color: #1a98A2;
+	border-radius: 5px;
+	text-align: left;
+}
+
+.selectRow
+{
+	display: inline;
+}
+
 .greenCommunicate
 {
 	font-size: 14px;
@@ -208,10 +243,57 @@ table
 	font-size: 14px;
 }
 
-#chosenForDelete
+
+.limitRowp
+{
+	display: inline;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.underLimit
+{
+	background-color: #8fe496;
+	font-size: 13px;
+	border-radius: 4px;
+	color: black;
+}
+
+.overLimit
+{
+	background-color: #e36060;
+}
+
+.chosenCategory
 {
 	font-size: 30px;
 	border-bottom: 1px solid white;
+}
+
+
+select:disabled
+{
+    background-color: white;
+	opacity: 1;
+	border-radius: 0;
+}
+
+
+#limitsSelect
+{
+
+	font-size: 18px;
+	padding:5px;
+	padding-left:0px;
+	min-width: 133px;
+}
+
+#selectedCategory
+{
+	padding:5px;
+	padding-right:0px;
+	border-radius: 0;
+	width: flex;
 }
 
 @media(max-width: 575px)
