@@ -185,5 +185,32 @@ class Settings extends \Core\Controller
 		$expenseCategories -> addLimit( $_POST['categoryName'] , $_POST['categoryLimit']);
 	}
 	
+	public function updatePaymentMethodNameAction()
+	{
+		$userId=$_SESSION['loggedUserId'];
+		$paymentMethod = new PaymentMethods($userId);
+		$paymentMethod -> updateMethodName($_POST['selectedMethodName'] , $_POST['newMethodName'] );
+	}
 	
+	public function deletePaymentMethodAction()
+	{
+		$userId=$_SESSION['loggedUserId'];
+		$paymentMethod = new PaymentMethods($userId);
+		
+		$idDeletedMethod = $paymentMethod -> getpaymentMethodId( $_POST['selectedMethodName'] );
+		$anotherName = 'Another';
+		$idAnotherMethod = $paymentMethod -> getpaymentMethodId($anotherName);
+		
+		$expense = new Expense;
+		$expense -> changeExpensePaymentMethodToAnother( $idDeletedMethod , $idAnotherMethod);
+		$paymentMethod -> deleteMethod( $_POST['selectedMethodName'] );
+		echo json_encode( $idAnotherMethod );
+	}
+	
+	public function newPaymentMethodAction()
+	{
+		$userId=$_SESSION['loggedUserId'];
+		$paymentMethod = new PaymentMethods($userId);
+		$paymentMethod -> createNewMethod( $_POST['newMethod'] );
+	}
 }

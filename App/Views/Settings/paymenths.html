@@ -1,7 +1,111 @@
 {% extends "base.html" %}
 
 {% block scripts %}
-
+<script>
+	$( document ).ready(function()
+	{
+		if( $("#selectedMethod").val() == 'Another' )
+		{
+			$("#editNameBtn").prop('disabled', true);
+			$("#deleteBtn").prop('disabled', true);
+		}
+		
+		$('select option').first().attr('selected', 'selected');
+		
+		$("#selectedMethod").click( function()
+		{
+			if( $("#selectedMethod").val() == 'Another' )
+			{
+				$("#editNameBtn").prop('disabled', true);
+				$("#deleteBtn").prop('disabled', true);
+			}
+			else
+			{
+				$("#editNameBtn").prop('disabled', false);
+				$("#deleteBtn").prop('disabled', false);
+			}
+		});
+		
+		$("#editNameBtn").click( function()
+		{
+			$('#editNameField').val( $('#selectedMethod').val() );
+		});
+		
+		$("#confirmNewNameBtn").click( function()
+		{
+			const form = new FormData(document.getElementById('paymentMethodsEditForm'));
+			fetch('updatePaymentMethodName', {
+				method: 'POST',
+				body: form
+			}).then(function(){location.reload();});
+		});
+		
+		$("#deleteBtn").click( function()
+		{
+			$("#chosenForDelete").text( $("#selectedMethod").val() );
+		});
+		
+		
+		$("#confirmDeleteMethodBtn").click( function()
+		{
+			const form1 = new FormData(document.getElementById('paymentMethodsEditForm'));
+			fetch('deletePaymentMethod', {
+				method: 'POST',
+				body: form1
+			}).then(response => response.json())
+				.then(data =>
+				{
+					console.log(data);
+				}).then(function(){location.reload();});
+		});
+		
+		$("#confirmNewMethodBtn").click( function()
+		{
+			let newMethodUppercase = $('#newMethodField').val();
+			newMethodUppercase = newMethodUppercase.replace(/\s/g, "")
+			newMethodUppercase = newMethodUppercase.toUpperCase();
+			let toCompare = '';
+			
+			const methodsArray = JSON.parse('{{ methods|json_encode|raw }}');
+			var isGood = true;
+			
+			for(var i=0 ; i < methodsArray.length ; i++)
+			{
+				toCompare = methodsArray[i];
+				toCompare = toCompare.toUpperCase();
+				if( toCompare == newMethodUppercase)
+				{
+					isGood = false;
+				}
+			}
+			if( newMethodUppercase == '')
+			{
+				$('#errorField').text('Wrong method name!');
+			}
+			else
+			{
+				if( isGood )
+				{
+					const form = new FormData(document.getElementById('newMethodForm'));
+					fetch('newPaymentMethod', {
+						method: 'POST',
+						body: form
+					}).then(function(){location.reload();});
+				}
+				else
+				{
+					$('#errorField').text('Method already exist !');
+				}
+			}
+		});
+		
+		$('#newMethodModal').on('hidden.bs.modal', function(e)
+		{
+			$('#errorField').text('');
+			$('#newMethodField').val('');
+		});
+	});
+</script>
 
 {% endblock %}
 	
@@ -35,7 +139,7 @@
 			<div class="row m-3">
 				<span class="m-2"> Select method to edit </span>
 				<div class="row pb-2 mt-1">
-					<select id="selectedCategory" class="textField h-100 p-2" name="selectedCategoryName" size="{{methods|length}}">
+					<select id="selectedMethod" class="textField h-100 p-2" name="selectedMethodName" size="{{methods|length}}">
 						{% for name in methods %}
 							<option>{{name}}</option>
 						{% endfor %}
@@ -59,7 +163,7 @@
 			  <div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content mainPanel">
 				  <div class="modal-body  mb-4">
-					<input type="text" class="form-control" id="editNameField" aria-label="newCategory" name="newCategoryName">
+					<input type="text" class="form-control" id="editNameField" aria-label="newCategory" name="newMethodName">
 				  </div>
 				  <div class="row">
 					<div class="col">
@@ -83,15 +187,15 @@
 				<p id='chosenForDelete' class="text-center chosenCategory"></p>
 			</div>
 			<div class="row">
-				<p class="text-justify"> Are you sure you want dalete this category ?
-				All expenses with this category will be assign to Another category. </p>
+				<p class="text-justify"> Are you sure you want dalete this payment method ?
+				All expenses with this method will be assign to Another method. </p>
 			</div>
 			<div class="row">
 			<div class="col">
 				<button type="button" class="btn buttonsStyle" data-dismiss="modal">Close</button>
 			</div>
 			<div class="col">
-				<button type="submit" class="btn buttonsStyle" data-dismiss="modal" id="confirmDeleteCategoryBtn">Delete category</button>
+				<button type="submit" class="btn buttonsStyle" data-dismiss="modal" id="confirmDeleteMethodBtn">Delete category</button>
 			</div>
 		  </div>
 		</div>
@@ -99,15 +203,15 @@
 	</div>
 	
 	<!-- Modal for new method -->
-	<div class="modal fade" id="newMethodModal" tabindex="-1" role="dialog" aria-labelledby="newCategoryModalTitle" aria-hidden="true">
+	<div class="modal fade" id="newMethodModal" tabindex="-1" role="dialog" aria-labelledby="newMethodModalTitle" aria-hidden="true">
 	  <div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content mainPanel">
-			<form id="newCategoryForm">
+			<form id="newMethodForm">
 				<div class="row" >
-					<p class="text-center font-italic"> Enter name of new category </p>
+					<p class="text-center font-italic"> Enter name of new payment method </p>
 				</div>
 				<div class="modal-body  mb-4">
-					<input type="text" class="form-control" id="newNameField" aria-label="newCategory" name="newCategory">
+					<input type="text" class="form-control" id="newMethodField" aria-label="newMethod" name="newMethod">
 				</div>
 				<div class="row" >
 					<p class="text-center error" id="errorField" ></p>
@@ -117,7 +221,7 @@
 						<button type="button" class="btn buttonsStyle" data-dismiss="modal">Close</button>
 					</div>
 					<div class="col">
-						<button type="button" name="newSubmitBtn" class="btn buttonsStyle" id="confirmNewCategoryBtn">Confirm category</button>
+						<button type="button" name="newSubmitBtn" class="btn buttonsStyle" id="confirmNewMethodBtn">Confirm category</button>
 					</div>
 				</div>
 			</form>

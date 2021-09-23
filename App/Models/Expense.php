@@ -78,4 +78,18 @@ class Expense extends \Core\Model
 		$stmt->bindValue( ':id_deleted_category', $idDeletedCategory, PDO::PARAM_STR);
 		$stmt->execute();
 	}
+	
+	public function changeExpensePaymentMethodToAnother( $idDeletedMethod, $idAnotherMethod)
+	{
+		$sql = 'UPDATE expenses 
+			SET payment_method_assigned_to_user_id=:id_another_method
+			WHERE payment_method_assigned_to_user_id=:id_deleted_method';
+
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+
+		$stmt->bindValue( ':id_another_method', $idAnotherMethod, PDO::PARAM_STR);
+		$stmt->bindValue( ':id_deleted_method', $idDeletedMethod, PDO::PARAM_STR);
+		$stmt->execute();
+	}
 }

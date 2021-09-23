@@ -27,7 +27,7 @@ class PaymentMethods extends \Core\Model
 	
 	public function getMethodsById($userId)
 	{
-		$sql = "SELECT * FROM payment_methods_assigned_to_users WHERE user_id = :userId";
+		$sql = "SELECT * FROM payment_methods_assigned_to_users WHERE user_id = :userId ORDER BY id DESC;";
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
@@ -61,5 +61,43 @@ class PaymentMethods extends \Core\Model
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		 return  $result['id'];
 	}
+	
+	public function updateMethodName( $oldName, $newName)
+	{
+		$sql = 'UPDATE payment_methods_assigned_to_users 
+			SET name=:newName
+			WHERE user_id=:userId AND name=:oldName;';
 
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+
+		$stmt->bindValue( ':newName', $newName, PDO::PARAM_STR);
+		$stmt->bindValue( ':oldName', $oldName, PDO::PARAM_STR);
+		$stmt->bindValue( ':userId', $this -> userId, PDO::PARAM_STR);
+		$stmt->execute();
+	}
+	
+	public function deleteMethod( $name )
+	{
+		$sql = 'DELETE FROM payment_methods_assigned_to_users
+			WHERE user_id=:userId AND name=:name;';
+
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+
+		$stmt->bindValue( ':name', $name, PDO::PARAM_STR);
+		$stmt->bindValue( ':userId', $this -> userId, PDO::PARAM_STR);
+		$stmt->execute();
+	}
+
+	public function createNewMethod( $name)
+	{
+		$sql = 'INSERT INTO payment_methods_assigned_to_users VALUES ( NULL , :userId , :name );';
+
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+		$stmt->bindValue( ':userId', $this -> userId, PDO::PARAM_STR);
+		$stmt->bindValue( ':name', $name, PDO::PARAM_STR);
+		$stmt->execute();
+	}
 }
